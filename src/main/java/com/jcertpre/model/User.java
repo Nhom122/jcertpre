@@ -1,6 +1,6 @@
 package com.jcertpre.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")

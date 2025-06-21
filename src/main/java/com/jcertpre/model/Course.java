@@ -1,6 +1,6 @@
 package com.jcertpre.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "courses")
@@ -24,6 +24,9 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
+
+    @Column(name = "approved")
+    private Boolean approved = false;
 
     public Course() {}
 
@@ -56,4 +59,10 @@ public class Course {
 
     public User getInstructor() { return instructor; }
     public void setInstructor(User instructor) { this.instructor = instructor; }
+
+    public Boolean getApproved() {return approved;}
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
 }
