@@ -25,6 +25,9 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
+    @Column(name = "approved")
+    private Boolean approved = false;
+
     public Course() {}
 
     public Course(String title, String description, CourseType courseType, User instructor) {
@@ -56,4 +59,7 @@ public class Course {
 
     public User getInstructor() { return instructor; }
     public void setInstructor(User instructor) { this.instructor = instructor; }
+
+    public Boolean getApproved() {return approved;}
+    public void setApproved(Boolean approved) {}
 }
