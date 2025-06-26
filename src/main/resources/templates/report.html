@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo tiến độ</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Báo cáo tiến độ học tập</h2>
+    <table class="table table-striped mt-3">
+        <tr>
+            <th>Tổng số môn đã học</th>
+            <td th:text="${report.totalSubjects}"></td>
+        </tr>
+        <tr>
+            <th>Điểm trung bình</th>
+            <td th:text="${report.averageScore}"></td>
+        </tr>
+        <tr>
+            <th>Xếp loại</th>
+            <td th:text="${report.rating}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
