@@ -3,10 +3,11 @@ package com.jcertpre.services;
 import com.jcertpre.model.Exam;
 import com.jcertpre.model.ExamResult;
 import com.jcertpre.repositories.IExamRepository;
-import com.jcertpre.repositories.ExamResultRepository;
+import com.jcertpre.repositories.IExamResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,7 +17,7 @@ public class ExamService {
     private IExamRepository examRepository;
 
     @Autowired
-    private ExamResultRepository examResultRepository;
+    private IExamResultRepository IExamResultRepository;
 
     // L6: Lấy tất cả đề thi từ DB
     public List<Exam> getAllExams() {
@@ -32,16 +33,23 @@ public class ExamService {
     public ExamResult gradeExam(Long examId, List<String> answers) {
         Exam exam = getExamById(examId);
         List<String> correctAnswers = exam.getCorrectAnswers();
-        int score = 0;
 
-        for (int i = 0; i < correctAnswers.size() && i < answers.size(); i++) {
+        int correctCount = 0;
+        for (int i = 0; i < Math.min(correctAnswers.size(), answers.size()); i++) {
             if (correctAnswers.get(i).trim().equalsIgnoreCase(answers.get(i).trim())) {
-                score++;
+                correctCount++;
             }
         }
 
-        ExamResult result = new ExamResult(exam, score, correctAnswers.size(), "Anonymous");
-        return examResultRepository.save(result);
-    }
-}
+        double score = ((double) correctCount / correctAnswers.size()) * 10.0;
 
+        ExamResult result = new ExamResult();
+        result.setStudentName("Anonymous"); // sau này bạn có thể set theo session
+        result.setSubjectName(exam.getTitle()); // dùng title làm tên môn thi
+        result.setScore(score);
+        result.setExamDate(LocalDate.now());
+
+        return IExamResultRepository.save(result);
+    }
+
+}

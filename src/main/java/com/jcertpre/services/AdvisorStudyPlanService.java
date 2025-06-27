@@ -2,15 +2,15 @@ package com.jcertpre.services;
 
 import com.jcertpre.model.AdvisorStudyPlan;
 import com.jcertpre.model.User;
-import com.jcertpre.repositories.AdvisorStudyPlanRepository;
+import com.jcertpre.repositories.IAdvisorStudyPlanRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class AdvisorStudyPlanService {
-    private final AdvisorStudyPlanRepository repo;
+    private final IAdvisorStudyPlanRepository repo;
 
-    public AdvisorStudyPlanService(AdvisorStudyPlanRepository repo) {
+    public AdvisorStudyPlanService(IAdvisorStudyPlanRepository repo) {
         this.repo = repo;
     }
 

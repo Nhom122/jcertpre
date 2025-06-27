@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AdvisorStudyPlanRepository extends JpaRepository<AdvisorStudyPlan, Long> {
+public interface IAdvisorStudyPlanRepository extends JpaRepository<AdvisorStudyPlan, Long> {
     List<AdvisorStudyPlan> findByLearner(User learner);
     List<AdvisorStudyPlan> findByAdvisor(User advisor);
 }

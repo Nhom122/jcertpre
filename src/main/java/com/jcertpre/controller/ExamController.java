@@ -1,5 +1,3 @@
-// ExamController.java - Xử lý chức năng L6: Làm bài thi mô phỏng và chấm điểm
-
 package com.jcertpre.controller;
 
 import com.jcertpre.model.Exam;
@@ -22,7 +20,7 @@ public class ExamController {
     // L6: Hiển thị danh sách đề thi
     @GetMapping("/exams")
     public String listExams(Model model) {
-        List<ExamResult> exams = examService.getAllExams();
+        List<Exam> exams = examService.getAllExams();
         model.addAttribute("exams", exams);
         return "exam";
     }

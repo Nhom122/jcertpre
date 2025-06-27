@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ConsultationScheduleRepository extends JpaRepository<ConsultationSchedule, Long> {
+public interface IConsultationScheduleRepository extends JpaRepository<ConsultationSchedule, Long> {
     List<ConsultationSchedule> findByAdvisor(User advisor);
     List<ConsultationSchedule> findByLearner(User learner);
 }
