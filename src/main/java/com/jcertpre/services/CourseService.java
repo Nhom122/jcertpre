@@ -16,6 +16,11 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
+    //Lay tat ca danh sach khoa hoc
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
+    }
+
     public Course approveCourse(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
