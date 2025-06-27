@@ -3,7 +3,7 @@ package com.jcertpre.services;
 import com.jcertpre.model.Exam;
 import com.jcertpre.model.ExamResult;
 import com.jcertpre.repositories.IExamRepository;
-import com.jcertpre.repositories.ExamResultRepository;
+import com.jcertpre.repositories.IExamResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class ExamService {
     private IExamRepository examRepository;
 
     @Autowired
-    private ExamResultRepository examResultRepository;
+    private IExamResultRepository IExamResultRepository;
 
     // L6: Lấy tất cả đề thi từ DB
     public List<Exam> getAllExams() {
@@ -41,7 +41,7 @@ public class ExamService {
         }
 
         ExamResult result = new ExamResult(exam, score, correctAnswers.size(), "Anonymous");
-        return examResultRepository.save(result);
+        return IExamResultRepository.save(result);
     }
 }
 

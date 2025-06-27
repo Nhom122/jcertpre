@@ -2,16 +2,16 @@ package com.jcertpre.services;
 
 import com.jcertpre.model.ConsultationSchedule;
 import com.jcertpre.model.User;
-import com.jcertpre.repositories.ConsultationScheduleRepository;
+import com.jcertpre.repositories.IConsultationScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ConsultationScheduleService {
-    private final ConsultationScheduleRepository repo;
+    private final IConsultationScheduleRepository repo;
 
-    public ConsultationScheduleService(ConsultationScheduleRepository repo) {
+    public ConsultationScheduleService(IConsultationScheduleRepository repo) {
         this.repo = repo;
     }
 
