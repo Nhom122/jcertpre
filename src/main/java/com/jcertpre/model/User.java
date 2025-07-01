@@ -24,6 +24,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(columnDefinition = "TEXT")
+    private String note;
+
+    // --- Constructors ---
+
     public User() {}
 
     public User(String email, String password, String fullName, Role role) {
@@ -41,6 +46,8 @@ public class User {
         this.role = role;
     }
 
+    // --- Getters & Setters ---
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -55,4 +62,7 @@ public class User {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
 }

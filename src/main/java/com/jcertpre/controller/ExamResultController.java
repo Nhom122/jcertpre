@@ -19,6 +19,6 @@ public class ExamResultController {
     public String showResults(Model model) {
         List<ExamResult> results = service.getAllResults();
         model.addAttribute("results", results);
-        return "result"; // result.html
+        return "ExamResult"; // result.html
     }
 }
