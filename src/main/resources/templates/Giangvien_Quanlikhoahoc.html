@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý khóa học</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>🎓 Khóa học của tôi</h2>
+            <p>Quản lý, chỉnh sửa và theo dõi các khóa học bạn đã tạo</p>
+        </div>
+        <a th:href="@{/instructor/courses/create}" class="btn btn-success">➕ Tạo khóa học mới</a>
+    </div>
+
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Tiêu đề</th>
+            <th>Mô tả</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course : ${courses}">
+            <td th:text="${course.id}">1</td>
+            <td th:text="${course.title}">Tiếng Anh B1</td>
+            <td th:text="${course.description}">Mô tả khóa học</td>
+            <td>
+                <span th:if="${course.approved}" class="badge badge-success">Đã duyệt</span>
+                <span th:unless="${course.approved}" class="badge badge-warning">Chờ duyệt</span>
+            </td>
+            <td>
+                <a th:href="@{/instructor/courses/{id}/lessons(id=${course.id})}" class="btn btn-sm btn-primary">📚 Xem bài giảng</a>
+                <a th:href="@{/instructor/courses/{id}/edit(id=${course.id})}" class="btn btn-sm btn-info">✏️ Sửa</a>
+                <form th:action="@{/instructor/courses/delete/{id}(id=${course.id})}" method="post" style="display:inline-block;"
+                      onsubmit="return confirm('Bạn có chắc muốn xóa khóa học này?')">
+                    <button type="submit" class="btn btn-sm btn-danger">🗑️ Xóa</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

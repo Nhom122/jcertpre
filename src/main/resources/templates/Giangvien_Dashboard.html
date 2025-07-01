@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <title>👨‍🏫 Trang Chủ Giảng Viên</title>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>👨‍🏫 Chào mừng, Giảng viên!</h1>
+    <p>Hãy chọn một chức năng bên dưới để bắt đầu công việc</p>
+
+    <div class="row mt-4">
+        <!-- Tạo khóa học -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/courses/create" class="btn btn-success btn-block btn-lg">📘 Tạo Khóa Học</a>
+        </div>
+
+        <!-- Quản lý khóa học -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/courses" class="btn btn-info btn-block btn-lg">📚 Quản Lý Khóa Học</a>
+        </div>
+
+        <!-- Thêm bài giảng -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/courses" class="btn btn-warning btn-block btn-lg">🎞️ Thêm Bài Giảng</a>
+        </div>
+
+        <!-- Lên lịch livestream -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/livestreams/schedule" class="btn btn-primary btn-block btn-lg">🎥 Lên Lịch Livestream</a>
+        </div>
+
+        <!-- Xem feedback -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/feedbacks" class="btn btn-secondary btn-block btn-lg">📨 Xem Câu Hỏi Từ Học Viên</a>
+        </div>
+
+        <!-- Trả lời feedback -->
+        <div class="col-md-6 mb-3">
+            <a href="/instructor/feedbacks" class="btn btn-dark btn-block btn-lg">✍️ Trả Lời Câu Hỏi</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
