@@ -23,26 +23,19 @@
 </head>
 <body>
 <h1>Đăng ký tài khoản</h1>
-<form th:action="@{/api/users/register}" method="post">
+<form th:action="@{/api/register/learner}" method="post">
   <div class="form-group">
     <label for="name">Họ tên</label>
-    <input type="text" id="name" name="name" required/>
+    <input type="text" id="name" name="fullName" required/>
   </div>
   <div class="form-group">
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required/>
+    <p th:if="${error}" th:text="${error}" style="color: red; margin-top: 0.5rem;"></p>
   </div>
   <div class="form-group">
     <label for="password">Mật khẩu</label>
     <input type="password" id="password" name="password" required/>
-  </div>
-  <div class="form-group">
-    <label for="role">Vai trò</label>
-    <select id="role" name="role" onchange="toggleExamTarget()" required>
-      <option value="LEARNER">Học viên</option>
-      <option value="INSTRUCTOR">Giảng viên</option>
-      <option value="ADVISOR">Cố vấn</option>
-    </select>
   </div>
   <div class="form-group" id="examTargetGroup">
     <label for="examTarget">Mục tiêu thi</label>

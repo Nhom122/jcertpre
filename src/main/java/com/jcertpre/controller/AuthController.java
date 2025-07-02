@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -18,10 +17,7 @@ public class AuthController {
 
     // 👉 Hiển thị trang đăng nhập
     @GetMapping("/login")
-    public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
-        if (error != null) {
-            model.addAttribute("error", "Sai email hoặc mật khẩu");
-        }
+    public String loginPage() {
         return "login"; // login.html trong /templates
     }
 
@@ -32,40 +28,47 @@ public class AuthController {
     }
 
     // ✅ Xử lý đăng ký Learner
-    @PostMapping("/register/learner")
-    public RedirectView registerLearner(@RequestParam String email,
+    @PostMapping("/api/register/learner")
+    public String registerLearner(@RequestParam String email,
                                         @RequestParam String password,
                                         @RequestParam String fullName,
-                                        RedirectView redirectView) {
-        userService.registerLearner(email, password, fullName);
-        return new RedirectView("/auth/login"); // sau khi đăng ký xong chuyển đến login
+                                        Model model) {
+        try {
+            userService.registerLearner(email, password, fullName);
+            return "redirect:/login";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
     }
+        }
 
     // ✅ Đăng nhập
-    @PostMapping("/login")
-    public RedirectView login(@RequestParam String email,
-                              @RequestParam String password,
-                              HttpSession session) {
+    @PostMapping("/api/login")
+    public String login(@RequestParam String email,
+                        @RequestParam String password,
+                        HttpSession session,
+                        Model model) {
         try {
             User user = userService.loginUser(email, password);
             session.setAttribute("currentUser", user);
 
             return switch (user.getRole()) {
-                case LEARNER -> new RedirectView("/learner/dashboard");
-                case ADMIN -> new RedirectView("/admin/dashboard");
-                case INSTRUCTOR -> new RedirectView("/teacher/dashboard");
-                case ADVISOR -> new RedirectView("/advisor/dashboard");
-                default -> new RedirectView("/unknown-role");
+                case LEARNER -> "redirect:/learner/dashboard";
+                case ADMIN -> "redirect:/admin/dashboard";
+                case INSTRUCTOR -> "redirect:/teacher/dashboard";
+                case ADVISOR -> "redirect:/advisor/dashboard";
             };
         } catch (RuntimeException e) {
-            return new RedirectView("/auth/login?error=true");
+            model.addAttribute("error", e.getMessage());
+            return "login";
         }
     }
 
     // ✅ Đăng xuất
     @GetMapping("/logout")
-    public RedirectView logout(HttpSession session) {
+    public String logout(HttpSession session) {
         session.invalidate();
-        return new RedirectView("/auth/login");
+        return "redirect:/login";
     }
+
 }

@@ -34,12 +34,9 @@ public class UserService {
 
     // Đăng nhập (basic check)
     public User loginUser(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
-            return userOpt.get();
-        } else {
-            throw new RuntimeException("Invalid email or password.");
-        }
+        return userRepository.findByEmail(email)
+                .filter(user -> user.getPassword().equals(password))
+                .orElseThrow(() -> new RuntimeException("Email hoặc mật khẩu không đúng."));
     }
 
     // Lấy danh sách tất cả người dùng

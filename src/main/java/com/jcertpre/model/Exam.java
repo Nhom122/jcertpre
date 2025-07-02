@@ -23,8 +23,7 @@ public class Exam {
     @Column(name = "correct_answer")
     private List<String> correctAnswers;
 
-    @ElementCollection
-    @CollectionTable(name = "exam_option_groups", joinColumns = @JoinColumn(name = "exam_id"))
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OptionGroup> optionGroups;
 
     public Exam() {}

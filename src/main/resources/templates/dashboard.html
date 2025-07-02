@@ -77,7 +77,7 @@
   <a th:href="@{/profile}" class="logo-link">
     <img th:src="@{/images/logo.png}" alt="Logo" />
   </a>
-  <div class="header-title">Chào <span th:text="${user.name}">Học viên</span>!</div>
+  <div class="header-title">Chào <span th:text="${user.fullName}">Học viên</span>!</div>
 </header>
 
 <nav>
@@ -118,17 +118,22 @@
 
 <section id="progress">
   <h2 class="section-title">📈 Tiến độ học tập</h2>
-  <div class="card">
-    <p th:text="'Bạn đã hoàn thành ' + ${progress.percent} + '% mục tiêu học JLPT N3.'"></p>
-    <p th:text="'Kết quả gần đây: ' + ${progress.score} + ' điểm / 180 điểm'"></p>
+
+  <div class="card" th:if="${progress != null}">
+    <p>Tiến độ: <span th:text="${progress.percent} + '%'">0%</span></p>
+    <p th:text="'Kết quả gần đây: ' + ${progress.score} + ' điểm / 180 điểm'">Kết quả gần đây</p>
+  </div>
+
+  <div class="card" th:unless="${progress != null}">
+    <p>Chưa có dữ liệu tiến độ học tập. Hãy bắt đầu một khoá học để theo dõi tiến trình của bạn!</p>
   </div>
 </section>
 
 <section id="advice">
   <h2 class="section-title">👨‍🏫 Tư vấn học tập</h2>
   <div class="card" th:if="${advice != null}">
-    <p th:text="'Cố vấn: ' + ${advice.advisorName}"></p>
-    <p th:text="'Lộ trình: ' + ${advice.plan}"></p>
+    <p th:text="'Cố vấn: ' + ${advice.advisorName}">Cố vấn</p>
+    <p th:text="'Lộ trình: ' + ${advice.plan}">Lộ trình</p>
     <a class="btn" th:href="@{/appointments/view}">Xem chi tiết</a>
   </div>
 </section>
