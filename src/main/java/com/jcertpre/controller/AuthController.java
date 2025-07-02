@@ -4,24 +4,44 @@ import com.jcertpre.model.User;
 import com.jcertpre.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 public class AuthController {
+
     @Autowired
     private UserService userService;
 
-    //Đăng ký người học (Learner)
-    @PostMapping("/register/learner")
-    public User registerLearner(@RequestParam String email,
-                                @RequestParam String password,
-                                @RequestParam String fullName) {
-        return userService.registerLearner(email, password, fullName);
+    // 👉 Hiển thị trang đăng nhập
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Sai email hoặc mật khẩu");
+        }
+        return "login"; // login.html trong /templates
     }
 
-    //đăng nhập
+    // 👉 Hiển thị trang đăng ký
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register"; // register.html trong /templates
+    }
+
+    // ✅ Xử lý đăng ký Learner
+    @PostMapping("/register/learner")
+    public RedirectView registerLearner(@RequestParam String email,
+                                        @RequestParam String password,
+                                        @RequestParam String fullName,
+                                        RedirectView redirectView) {
+        userService.registerLearner(email, password, fullName);
+        return new RedirectView("/auth/login"); // sau khi đăng ký xong chuyển đến login
+    }
+
+    // ✅ Đăng nhập
     @PostMapping("/login")
     public RedirectView login(@RequestParam String email,
                               @RequestParam String password,
@@ -42,12 +62,10 @@ public class AuthController {
         }
     }
 
-
-    //đăng xuất
+    // ✅ Đăng xuất
     @GetMapping("/logout")
     public RedirectView logout(HttpSession session) {
         session.invalidate();
-        return new RedirectView("/");
+        return new RedirectView("/auth/login");
     }
-
 }

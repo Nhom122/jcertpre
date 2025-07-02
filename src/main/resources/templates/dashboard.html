@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảng điều khiển Học viên - JCertPre</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f0f9ff; }
+    header {
+      background: #0c4a6e;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .logo-link img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      border: 2px solid white;
+    }
+    .header-title {
+      flex: 1;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    nav {
+      background: #0284c7;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0.5rem;
+    }
+    section {
+      padding: 2rem;
+    }
+    .section-title {
+      color: #0c4a6e;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn {
+      background: #0c4a6e;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a th:href="@{/profile}" class="logo-link">
+    <img th:src="@{/images/logo.png}" alt="Logo" />
+  </a>
+  <div class="header-title">Chào <span th:text="${user.name}">Học viên</span>!</div>
+</header>
+
+<nav>
+  <a href="#courses">Khoá học</a>
+  <a href="#exams">Mô phỏng thi</a>
+  <a href="#progress">Tiến độ học</a>
+  <a href="#advice">Tư vấn</a>
+  <a href="#recommend">Khuyến nghị học tập</a>
+  <a href="#questions">Gửi câu hỏi</a>
+  <a th:href="@{/logout}">Đăng xuất</a>
+</nav>
+
+<section id="notifications">
+  <h2 class="section-title">🔔 Thông báo mới</h2>
+  <div class="card" th:each="noti : ${notifications}">
+    <p><strong th:text="${noti.date}">[dd/MM]</strong> <span th:text="${noti.content}">Nội dung thông báo</span></p>
+  </div>
+</section>
+
+<section id="courses">
+  <h2 class="section-title">📚 Khoá học của tôi</h2>
+  <div style="text-align: right; margin-bottom: 1rem;">
+    <a class="btn" th:href="@{/courses/register}">➕ Đăng ký khóa học mới</a>
+  </div>
+  <div class="card" th:each="course : ${userCourses}">
+    <p>Khóa học: <span th:text="${course.name}">Tên khóa học</span></p>
+    <a class="btn" th:href="@{/courses/{id}(id=${course.id})}">Vào học</a>
+  </div>
+</section>
+
+<section id="exams">
+  <h2 class="section-title">📝 Luyện đề thi</h2>
+  <div class="card" th:each="exam : ${examSimulations}">
+    <p th:text="${exam.title}">Tên đề thi</p>
+    <a class="btn" th:href="@{/exams/start/{id}(id=${exam.id})}">Bắt đầu thi</a>
+  </div>
+</section>
+
+<section id="progress">
+  <h2 class="section-title">📈 Tiến độ học tập</h2>
+  <div class="card">
+    <p th:text="'Bạn đã hoàn thành ' + ${progress.percent} + '% mục tiêu học JLPT N3.'"></p>
+    <p th:text="'Kết quả gần đây: ' + ${progress.score} + ' điểm / 180 điểm'"></p>
+  </div>
+</section>
+
+<section id="advice">
+  <h2 class="section-title">👨‍🏫 Tư vấn học tập</h2>
+  <div class="card" th:if="${advice != null}">
+    <p th:text="'Cố vấn: ' + ${advice.advisorName}"></p>
+    <p th:text="'Lộ trình: ' + ${advice.plan}"></p>
+    <a class="btn" th:href="@{/appointments/view}">Xem chi tiết</a>
+  </div>
+</section>
+
+<section id="recommend">
+  <h2 class="section-title">💡 Khuyến nghị học tập</h2>
+  <div class="card" th:if="${suggestions != null}">
+    <p>Dựa trên kết quả gần nhất, bạn nên ôn tập thêm:</p>
+    <ul>
+      <li th:each="tip : ${suggestions}" th:text="${tip}">Gợi ý học</li>
+    </ul>
+    <a class="btn" th:href="@{/suggestions/review}">Ôn tập ngay</a>
+  </div>
+</section>
+
+<section id="questions">
+  <h2 class="section-title">❓ Gửi câu hỏi đến giảng viên</h2>
+  <div class="card">
+    <form th:action="@{/questions/submit}" method="post">
+      <label for="question">Câu hỏi của bạn:</label><br />
+      <textarea id="question" name="content" rows="4" style="width: 100%; margin-top: 0.5rem;" required></textarea><br /><br />
+      <button class="btn" type="submit">Gửi câu hỏi</button>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>

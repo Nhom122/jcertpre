@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Hồ sơ cá nhân</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">Hồ sơ cá nhân</h2>
+
+  <form th:action="@{/profile}" th:object="${user}" method="post" class="row g-3">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <!-- Họ tên -->
+    <div class="col-md-6">
+      <label class="form-label">Họ và tên</label>
+      <input type="text" class="form-control" th:field="*{fullName}" required>
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" th:field="*{email}" required>
+    </div>
+
+    <!-- Vai trò -->
+    <div class="col-md-6">
+      <label class="form-label">Vai trò</label>
+      <input type="text" class="form-control" th:field="*{role}" readonly>
+      <div class="form-text">Liên hệ quản trị viên để thay đổi vai trò.</div>
+    </div>
+
+    <!-- Ghi chú -->
+    <div class="col-12">
+      <label class="form-label">Ghi chú</label>
+      <textarea class="form-control" th:field="*{note}" rows="4" placeholder="Bạn có thể ghi chú gì đó ở đây..."></textarea>
+    </div>
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
