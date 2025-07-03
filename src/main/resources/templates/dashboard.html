@@ -75,10 +75,15 @@
 <body>
 <header>
   <a th:href="@{/profile}" class="logo-link">
-    <img th:src="@{/images/logo.png}" alt="Logo" />
+    <img th:src="@{/images/logo.png}" alt="Logo"
+         style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid white; object-fit: cover; margin-right: 0.75rem;" />
   </a>
-  <div class="header-title">Chào <span th:text="${user.name}">Học viên</span>!</div>
+  <div class="header-title">
+    Chào <span th:text="${user.name}">Học viên</span>!
+  </div>
 </header>
+
+
 
 <nav>
   <a href="#courses">Khoá học</a>
