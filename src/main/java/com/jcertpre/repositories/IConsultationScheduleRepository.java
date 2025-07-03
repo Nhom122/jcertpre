@@ -9,4 +9,6 @@ import java.util.List;
 public interface IConsultationScheduleRepository extends JpaRepository<ConsultationSchedule, Long> {
     List<ConsultationSchedule> findByAdvisor(User advisor);
     List<ConsultationSchedule> findByLearner(User learner);
+    List<ConsultationSchedule> findByAdvisorAndStatus(User advisor, String status);
+
 }

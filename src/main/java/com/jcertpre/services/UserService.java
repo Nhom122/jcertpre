@@ -23,7 +23,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    // Đăng ký tài khoản Learner mới
+    // Đăng ký tài khoản mới
     public User registerUser(String email, String password, String fullName, User.Role role) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use.");

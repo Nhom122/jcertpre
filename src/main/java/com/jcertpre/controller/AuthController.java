@@ -51,6 +51,7 @@ public class AuthController {
         try {
             User user = userService.loginUser(email, password);
             session.setAttribute("currentUser", user);
+            session.setAttribute("loggedInUser", user);
 
             return switch (user.getRole()) {
                 case LEARNER -> "redirect:/learner/dashboard";

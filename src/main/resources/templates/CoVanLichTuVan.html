@@ -9,17 +9,19 @@
 <div class="container mt-4">
   <h2 class="mb-4">📅 Tạo Lịch Tư Vấn Cá Nhân</h2>
 
-  <form th:action="@{/advisor/schedule}" method="post">
-    <input type="hidden" name="learnerId" th:value="${learnerId}">
+  <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <span th:text="${errorMessage}"></span>
+  </div>
 
+  <form th:action="@{/advisor/schedule}" method="post">
     <div class="form-group">
-      <label>Họ tên học viên</label>
-      <input type="text" name="learnerName" class="form-control" th:value="${learnerName}">
+      <label for="learnerId">Mã số học viên</label>
+      <input type="text" id="learnerId" name="learnerId" class="form-control" required placeholder="Nhập mã số học viên">
     </div>
 
     <div class="form-group">
       <label>Ngày tư vấn</label>
-      <input type="date" name="consultDate" class="form-control">
+      <input type="date" name="consultDate" class="form-control" required>
     </div>
 
     <div class="form-group">
@@ -37,7 +39,6 @@
       <textarea name="note" class="form-control" rows="3" placeholder="Ví dụ: cần hỗ trợ định hướng chuyên ngành..."></textarea>
     </div>
 
-    <!-- Trạng thái mặc định khi tạo: CHỜ DUYỆT -->
     <input type="hidden" name="status" value="PENDING">
 
     <button type="submit" class="btn btn-primary">Gửi Yêu Cầu Lịch</button>
