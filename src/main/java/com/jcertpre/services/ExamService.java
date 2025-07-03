@@ -40,7 +40,6 @@ public class ExamService {
                 correctCount++;
             }
         }
-
         double score = ((double) correctCount / correctAnswers.size()) * 10.0;
 
         ExamResult result = new ExamResult();
@@ -48,7 +47,6 @@ public class ExamService {
         result.setSubjectName(exam.getTitle()); // dùng title làm tên môn thi
         result.setScore(score);
         result.setExamDate(LocalDate.now());
-
         return IExamResultRepository.save(result);
     }
 
