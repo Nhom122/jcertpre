@@ -24,7 +24,7 @@ public class AdminController {
     @Autowired
     private FeedbackService feedbackService;
 
-    // ✅ Trang dashboard quản trị
+    /*// ✅ Trang dashboard quản trị
     @GetMapping("/dashboard")
     public String adminHome(Model model) {
         long totalUsers = userService.getAllUsers().size();
@@ -36,7 +36,7 @@ public class AdminController {
         model.addAttribute("pendingFeedbacks", pendingFeedbacks);
 
         return "Admin_trangchu"; // Trang tổng quan
-    }
+    }*/
 
     // ✅ Trang quản lý người dùng
     @GetMapping("/users")

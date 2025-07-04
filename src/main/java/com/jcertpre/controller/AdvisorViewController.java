@@ -19,7 +19,7 @@ public class AdvisorViewController {
     @Autowired
     private InstructorService instructorService;
 
-    // Trang dashboard giảng viên
+    /*// Trang dashboard giảng viên
     @GetMapping("/dashboard")
     public String showAdvisorDashboard(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -30,7 +30,7 @@ public class AdvisorViewController {
 
         model.addAttribute("user", currentUser);
         return "Giangvien_Dashboard"; // Tên file HTML
-    }
+    }*/
 
     // Giao diện quản lý khóa học
     @GetMapping("/courses")

@@ -39,7 +39,6 @@ public class AuthController {
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "register";
-    }
         }
     }
 
@@ -72,5 +71,4 @@ public class AuthController {
         session.invalidate();
         return "redirect:/login";
     }
-
 }
