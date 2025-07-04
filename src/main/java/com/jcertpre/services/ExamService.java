@@ -41,7 +41,7 @@ public class ExamService {
             }
         }
         double score = ((double) correctCount / correctAnswers.size()) * 10.0;
-
+        double score = ((double) correctCount / correctAnswers.size()) * 10.0;
         ExamResult result = new ExamResult();
         result.setStudentName("Anonymous"); // sau này bạn có thể set theo session
         result.setSubjectName(exam.getTitle()); // dùng title làm tên môn thi

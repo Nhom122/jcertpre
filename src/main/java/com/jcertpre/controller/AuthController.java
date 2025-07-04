@@ -41,6 +41,7 @@ public class AuthController {
             return "register";
     }
         }
+    }
 
     // ✅ Đăng nhập
     @PostMapping("/api/login")

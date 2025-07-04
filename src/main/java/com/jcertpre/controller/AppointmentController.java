@@ -8,12 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 @Controller
 public class AppointmentController {
 
     @Autowired
     private AppointmentService service;
 
+
+    // 1. Học viên gửi yêu cầu tư vấn
     @GetMapping("/appointment")
     public String showForm(Model model) {
         model.addAttribute("appointment", new Appointment());
@@ -22,6 +25,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public String submitForm(@ModelAttribute Appointment appointment) {
+        appointment.setStatus("PENDING");
         service.saveAppointment(appointment);
         return "redirect:/appointment/success";
     }
@@ -31,42 +35,47 @@ public class AppointmentController {
         return "appointment_success";
     }
 
-    @GetMapping("/appointments")
-    public String viewAllAppointments(Model model) {
-        model.addAttribute("appointments", service.getAllAppointments());
-        model.addAttribute("appointment", new Appointment());
-        return "appointments";
+    // 2. Cố vấn xem lịch đã được duyệt
+    @GetMapping("/appointments/approved")
+    public String viewApprovedAppointments(Model model) {
+        List<Appointment> approved = service.getAppointmentsByStatus("APPROVED");
+        model.addAttribute("appointments", approved);
+        return "approved_appointments";
     }
 
-    @GetMapping("/appointments/edit/{id}")
-    public String editAppointment(@PathVariable("id") Long id, Model model) {
-        Appointment appointment = service.getById(id);
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("appointments", service.getAllAppointments());
-        return "appointments";
+    // 3. ADMIN xử lý tất cả lịch trên một trang duy nhất
+    @GetMapping("/appointments/admin")
+    public String adminViewAllAppointments(Model model) {
+        List<Appointment> all = service.getAllAppointments();
+        model.addAttribute("appointments", all);
+        return "Admin_duyetcovan";
     }
 
-    //Giữ DUY NHẤT phương thức update này
-    @PostMapping("/appointments/update/{id}")
-    public String updateAppointment(@PathVariable("id") Long id,
-                                    @ModelAttribute Appointment appointment,
-                                    RedirectAttributes redirectAttrs) {
-        Appointment existing = service.getById(id);
-        if (existing != null) {
-            existing.setStudentName(appointment.getStudentName());
-            existing.setEmail(appointment.getEmail());
-            existing.setDate(appointment.getDate());
-            existing.setTimeSlot(appointment.getTimeSlot());
-            existing.setReason(appointment.getReason());
-            service.saveAppointment(existing);
+    // Duyệt lịch
+    @PostMapping("/appointments/approve/{id}")
+    public String approveAppointment(@PathVariable Long id, RedirectAttributes redirect) {
+        Appointment ap = service.getById(id);
+        if (ap != null) {
+            ap.setStatus("APPROVED");
+            ap.setRejectionReason(null);
+            service.saveAppointment(ap);
         }
-        redirectAttrs.addFlashAttribute("message", "Cập nhật thành công!");
-        return "redirect:/appointments";
+        redirect.addFlashAttribute("message", "✅ Lịch đã được duyệt.");
+        return "redirect:/appointments/admin";
     }
 
-    @PostMapping("/appointment/delete/{id}")
-    public String deleteAppointment(@PathVariable("id") Long id) {
-        service.deleteById(id);
-        return "redirect:/appointments";
+    // Từ chối lịch
+    @PostMapping("/appointments/reject/{id}")
+    public String rejectAppointment(@PathVariable Long id,
+                                    @RequestParam("reason") String reason,
+                                    RedirectAttributes redirect) {
+        Appointment ap = service.getById(id);
+        if (ap != null) {
+            ap.setStatus("REJECTED");
+            ap.setRejectionReason(reason);
+            service.saveAppointment(ap);
+        }
+        redirect.addFlashAttribute("message", "❌ Lịch đã bị từ chối.");
+        return "redirect:/appointments/admin";
     }
 }

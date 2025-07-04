@@ -23,8 +23,8 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    // Đăng ký tài khoản mới
-    public User registerUser(String email, String password, String fullName, User.Role role) {
+    // Đăng ký tài khoản Learner mới
+    public User registerUser(String email, String password, String fullName, Role role) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use.");
         }
@@ -45,7 +45,7 @@ public class UserService {
     }
 
     // Lấy danh sách người dùng theo vai trò
-    public List<User> getUsersByRole(User.Role role) {
+    public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
     }
 

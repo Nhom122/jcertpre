@@ -24,53 +24,34 @@ public class Appointment {
     @Column(name = "Reason")
     private String reason;
 
+    @Column(name = "Status")
+    private String status = "PENDING"; // Mặc định là chờ duyệt
 
-    // ✅ GETTER và SETTER
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "RejectionReason")
+    private String rejectionReason;
 
-    public String getStudentName() {
-        return studentName;
-    }
+    // Getters và Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getStudentName() { return studentName; }
+    public void setStudentName(String studentName) { this.studentName = studentName; }
 
-    public LocalDate getDate() {
-        return date;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getTimeSlot() {
-        return timeSlot;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public String getReason() {
-        return reason;
-    }
+    public String getTimeSlot() { return timeSlot; }
+    public void setTimeSlot(String timeSlot) { this.timeSlot = timeSlot; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public void setTimeSlot(String timeSlot) {
-        this.timeSlot = timeSlot;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
+    public String getRejectionReason() { return rejectionReason; }
+    public void setRejectionReason(String rejectionReason) { this.rejectionReason = rejectionReason; }
 }
