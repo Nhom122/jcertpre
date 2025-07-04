@@ -7,40 +7,33 @@
 </head>
 <body>
 <div class="container mt-4">
-  <h2 class="mb-4">📌 Đề Xuất Học Tập Cá Nhân</h2>
+  <h2 class="mb-4">📌 Đề Xuất Kế Hoạch Học Tập Cá Nhân</h2>
 
-  <form th:action="@{/advisor/suggestion}" method="post">
-    <input type="hidden" name="learnerId" th:value="${learnerId}">
+  <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+  <form th:action="@{/advisor/dashboard/studyplanapi}" method="post">
 
     <div class="form-group">
-      <label>Họ tên học viên</label>
-      <input type="text" name="learnerName" class="form-control" th:value="${learnerName}">
+      <label>🆔 Mã số học viên</label>
+      <input type="text" name="learnerId" class="form-control" placeholder="Nhập ID học viên..." required>
     </div>
 
     <div class="form-group">
-      <label>Ngày đề xuất</label>
-      <input type="date" name="suggestDate" class="form-control" th:value="${#dates.format(today, 'yyyy-MM-dd')}">
+      <label>🎯 Mục tiêu</label>
+      <textarea name="goal" class="form-control" rows="2" placeholder="VD: Đạt N3 trong 2 tháng..." required></textarea>
     </div>
 
     <div class="form-group">
-      <label>💡 Chỗ mạnh</label>
-      <textarea name="strengths" class="form-control" rows="3"
-                placeholder="VD: Từ vựng tốt, chăm chỉ, hiểu ngữ pháp..."></textarea>
+      <label>🛠️ Chiến lược học tập</label>
+      <textarea name="strategy" class="form-control" rows="4" placeholder="VD: Luyện đề JLPT mỗi ngày, học online 3 buổi/tuần..." required></textarea>
     </div>
 
     <div class="form-group">
-      <label>⚠️ Chỗ yếu</label>
-      <textarea name="weaknesses" class="form-control" rows="3"
-                placeholder="VD: Phát âm yếu, phản xạ chậm, thiếu tự tin khi nói..."></textarea>
+      <label>📝 Nhận xét tiến độ</label>
+      <textarea name="progressNote" class="form-control" rows="3" placeholder="VD: Tiến bộ nhanh, cần cải thiện từ vựng..."></textarea>
     </div>
 
-    <div class="form-group">
-      <label>✏️ Nội dung đề xuất</label>
-      <textarea name="suggestionContent" class="form-control" rows="4"
-                placeholder="VD: Nên học N1 để cải thiện phát âm chỉ độ..."></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success">Gửi đề xuất</button>
+    <button type="submit" class="btn btn-success">📤 Gửi đề xuất</button>
   </form>
 </div>
 </body>
