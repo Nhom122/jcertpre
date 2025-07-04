@@ -17,21 +17,33 @@ public class ProfileController {
     // Hiển thị trang chỉnh sửa hồ sơ cá nhân
     @GetMapping("/profile")
     public String viewProfile(HttpSession session, Model model) {
-        User currentUser = (User) session.getAttribute("user");
+        User currentUser = (User) session.getAttribute("loggedInUser");
 
         if (currentUser == null) {
             return "redirect:/login";
         }
 
         model.addAttribute("user", currentUser);
-        return "profile"; // -> profile.html (form chỉnh sửa)
+        return "profile-view"; // -> profile.html
+    }
+
+    @GetMapping("/fromprofile")
+    public String fromProfile(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("loggedInUser");
+
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", currentUser);
+        return "updateprofile"; // -> profile.html
     }
 
     // Cập nhật hồ sơ và chuyển sang trang hiển thị
-    @PostMapping("/profile")
+    @PostMapping("/formprofileapi")
     public String updateProfile(@ModelAttribute("user") User updatedUser,
                                 HttpSession session, Model model) {
-        User currentUser = (User) session.getAttribute("user");
+        User currentUser = (User) session.getAttribute("loggedInUser");
 
         if (currentUser == null) {
             return "redirect:/login";

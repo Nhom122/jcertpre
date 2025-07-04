@@ -9,12 +9,15 @@
 <div class="container mt-4">
   <h2>🎓 Tiến độ học tập của học viên</h2>
 
-  <!-- Form tìm kiếm học viên -->
-  <form class="form-inline mb-4" th:action="@{/learner/progress}" method="get">
-    <label class="mr-2">Tên học viên:</label>
-    <input type="text" name="name" class="form-control mr-2" placeholder="Nhập tên học viên..." required />
+  <!-- Form tìm kiếm học viên theo ID -->
+  <form class="form-inline mb-4" th:action="@{/advisor/dashboard/progress}" method="get">
+    <label class="mr-2">ID học viên:</label>
+    <input type="text" name="id" class="form-control mr-2" placeholder="Nhập ID học viên..." required />
     <button type="submit" class="btn btn-primary">🔍 Tìm</button>
   </form>
+
+  <!-- Thông báo lỗi nếu có -->
+  <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
   <!-- Nếu có kết quả -->
   <div th:if="${results != null}">
@@ -38,8 +41,6 @@
       </tbody>
     </table>
   </div>
-
-  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 </div>
 </body>
 </html>
