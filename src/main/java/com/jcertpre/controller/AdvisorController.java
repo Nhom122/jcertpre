@@ -146,6 +146,21 @@ public class AdvisorController {
         return "CoVanKeHoachhoctap";
     }
 
+    @PostMapping("/advisor/dashboard/delete/{id}")
+    public String deletePlan(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null || user.getRole() != User.Role.ADVISOR) {
+            return "redirect:/login";
+        }
+
+        // Gọi service để xóa kế hoạch theo id
+        advisorStudyPlanRepository.deleteById(id);  // bạn cần có service này
+
+        redirectAttributes.addFlashAttribute("message", "Xóa kế hoạch thành công!");
+        return "redirect:/advisor/dashboard/liststudyplan";
+    }
+
     @GetMapping("/advisor/dashboard/liststudyplan")
     public String showStudyplan(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");

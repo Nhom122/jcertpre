@@ -43,7 +43,7 @@
             <td th:text="${plan.progressNote}">Nhận xét</td>
             <td th:text="${plan.advisor.fullName}">Tên cố vấn</td>
             <td>
-                <form th:action="@{/advisor/plans/delete/{id}(id=${plan.id})}" method="post"
+                <form th:action="@{/advisor/dashboard/delete/{id}(id=${plan.id})}" method="post"
                       onsubmit="return confirm('Bạn chắc chắn muốn xóa kế hoạch này?')">
                     <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                 </form>
