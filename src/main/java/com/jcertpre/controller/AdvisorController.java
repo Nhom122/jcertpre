@@ -6,8 +6,6 @@ import com.jcertpre.services.AdvisorStudyPlanService;
 import com.jcertpre.services.ConsultationScheduleService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/advisor")
 public class AdvisorController {

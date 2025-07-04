@@ -1,7 +1,6 @@
 package com.jcertpre.repositories;
 
 import com.jcertpre.model.Exam;
-import com.jcertpre.model.ExamResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

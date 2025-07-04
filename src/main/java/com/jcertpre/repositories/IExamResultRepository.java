@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IExamResultRepository extends JpaRepository<ExamResult, Long> {
-    // có thể thêm các truy vấn tùy chỉnh nếu cần
 }
