@@ -23,6 +23,10 @@ public class ConsultationScheduleService {
         return repo.findByAdvisor(advisor);
     }
 
+    public List<ConsultationSchedule> getPendingByAdvisor(User advisor) {
+        return repo.findByAdvisorAndStatus(advisor, "PENDING");
+    }
+
     public List<ConsultationSchedule> getByLearner(User learner) {
         return repo.findByLearner(learner);
     }

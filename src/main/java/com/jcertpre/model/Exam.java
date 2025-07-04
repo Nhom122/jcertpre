@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "exams")
 public class Exam {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,17 +24,17 @@ public class Exam {
     @Column(name = "correct_answer")
     private List<String> correctAnswers;
 
-    // Constructors
-    public Exam() {
-    }
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OptionGroup> optionGroups;
 
-    public Exam(String title, List<String> questions, List<String> correctAnswers) {
+    public Exam() {}
+
+    public Exam(String title, List<String> questions, List<OptionGroup> optionGroups, List<String> correctAnswers) {
         this.title = title;
         this.questions = questions;
+        this.optionGroups = optionGroups;
         this.correctAnswers = correctAnswers;
     }
-
-// Getters & Setters
 
     public Long getId() {
         return id;
@@ -63,4 +64,11 @@ public class Exam {
         this.correctAnswers = correctAnswers;
     }
 
+    public List<OptionGroup> getOptionGroups() {
+        return optionGroups;
+    }
+
+    public void setOptionGroups(List<OptionGroup> optionGroups) {
+        this.optionGroups = optionGroups;
+    }
 }

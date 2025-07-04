@@ -21,7 +21,10 @@ public class JcertpreApplication {
 	@Bean
 	public CommandLineRunner loadTestAdvisor(IUserRepository userRepository) {
 		return args -> {
+			String learnerEmail = "a@gmail.com";
 			String advisorEmail = "advisor@example.com";
+			User learner = new User(learnerEmail, "123456", "a", User.Role.LEARNER);
+			userRepository.save(learner);
 			if (!userRepository.existsByEmail(advisorEmail)) {
 				User advisor = new User(advisorEmail, "123456", "Cố Vấn Nguyễn Văn A", User.Role.ADVISOR);
 				userRepository.save(advisor);

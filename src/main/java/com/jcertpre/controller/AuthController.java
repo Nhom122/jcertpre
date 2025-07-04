@@ -6,9 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class AuthController {
@@ -31,15 +30,16 @@ public class AuthController {
     // ✅ Xử lý đăng ký Learner
     @PostMapping("/api/register/learner")
     public String registerLearner(@RequestParam String email,
-                                  @RequestParam String password,
-                                  @RequestParam String fullName,
-                                  Model model) {
+                                        @RequestParam String password,
+                                        @RequestParam String fullName,
+                                        Model model) {
         try {
             userService.registerLearner(email, password, fullName);
             return "redirect:/login";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "register";
+    }
         }
     }
 
@@ -52,6 +52,7 @@ public class AuthController {
         try {
             User user = userService.loginUser(email, password);
             session.setAttribute("currentUser", user);
+            session.setAttribute("loggedInUser", user);
 
             return switch (user.getRole()) {
                 case LEARNER -> "redirect:/learner/dashboard";

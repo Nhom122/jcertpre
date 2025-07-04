@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông tin cá nhân</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">Thông tin cá nhân</h2>
+
+  <!-- Thông báo thành công -->
+  <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+  <div class="card p-4 shadow-sm rounded-3">
+    <dl class="row">
+      <dt class="col-sm-3">Họ và tên</dt>
+      <dd class="col-sm-9" th:text="${user.fullName}">Nguyễn Văn A</dd>
+
+      <dt class="col-sm-3">Email</dt>
+      <dd class="col-sm-9" th:text="${user.email}">email@example.com</dd>
+
+      <dt class="col-sm-3">Vai trò</dt>
+      <dd class="col-sm-9" th:text="${user.role}">LEARNER</dd>
+
+      <dt class="col-sm-3">Ghi chú</dt>
+      <dd class="col-sm-9" th:text="${user.note}">Không có ghi chú.</dd>
+    </dl>
+
+    <div class="mt-4">
+      <a href="/jcertpre/fromprofile" class="btn btn-secondary">Chỉnh sửa</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

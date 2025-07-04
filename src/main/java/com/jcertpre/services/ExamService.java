@@ -40,15 +40,13 @@ public class ExamService {
                 correctCount++;
             }
         }
-
         double score = ((double) correctCount / correctAnswers.size()) * 10.0;
-
+        double score = ((double) correctCount / correctAnswers.size()) * 10.0;
         ExamResult result = new ExamResult();
         result.setStudentName("Anonymous"); // sau này bạn có thể set theo session
         result.setSubjectName(exam.getTitle()); // dùng title làm tên môn thi
         result.setScore(score);
         result.setExamDate(LocalDate.now());
-
         return IExamResultRepository.save(result);
     }
 

@@ -33,7 +33,6 @@ public class QuestionController {
     public String success() {
         return "ask_success";
     }
-
     // Trang quản lý câu hỏi cho giảng viên
     @GetMapping("/questions")
     public String viewAllQuestions(Model model) {

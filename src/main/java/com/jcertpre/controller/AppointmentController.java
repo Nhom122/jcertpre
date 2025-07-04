@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
 @Controller
 public class AppointmentController {
 
     @Autowired
     private AppointmentService service;
+
 
     // 1. Học viên gửi yêu cầu tư vấn
     @GetMapping("/appointment")
