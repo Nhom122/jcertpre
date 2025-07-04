@@ -9,7 +9,7 @@
 <div class="container mt-5">
   <h2 class="mb-4">Hồ sơ cá nhân</h2>
 
-  <form th:action="@{/profile}" th:object="${user}" method="post" class="row g-3">
+  <form th:action="@{/formprofileapi}" th:object="${user}" method="post" class="row g-3">
 
     <input type="hidden" th:field="*{id}" />
 

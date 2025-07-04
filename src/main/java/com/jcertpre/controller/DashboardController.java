@@ -23,16 +23,15 @@ public class DashboardController {
     public String learnerDashboard(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
 
-        if (user == null) {
+        if (user == null || LEARNER != user.getRole()) {
             return "login";
         }
 
-        if (LEARNER != user.getRole()) {
-            return "login";
-        }
+        model.addAttribute("user", user);
 
         return "dashboard";
     }
+
 
     @GetMapping("/admin/dashboard")
     public String adminDashboard() {
