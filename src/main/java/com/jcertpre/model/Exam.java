@@ -1,7 +1,6 @@
 package com.jcertpre.model;
 
 import jakarta.persistence.*;
-import java.time.Duration;
 import java.util.List;
 
 @Entity
@@ -15,60 +14,29 @@ public class Exam {
 
     private String description;
 
-    private int durationMinutes; // thời gian làm bài (phút)
+    private int durationMinutes;
 
-    @ElementCollection
-    private List<String> questions;
-
-    @ElementCollection
-    private List<String> correctAnswers;
+    @ManyToMany
+    @JoinTable(
+            name = "exam_quizitem",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "quizitem_id")
+    )
+    private List<QuizItem> quizItems;
 
     // Getter & Setter
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public int getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setDurationMinutes(int durationMinutes) {
-        this.durationMinutes = durationMinutes;
-    }
-
-    public List<String> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<String> questions) {
-        this.questions = questions;
-    }
-
-    public List<String> getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(List<String> correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
+    public List<QuizItem> getQuizItems() { return quizItems; }
+    public void setQuizItems(List<QuizItem> quizItems) { this.quizItems = quizItems; }
 }

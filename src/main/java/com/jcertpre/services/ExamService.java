@@ -23,4 +23,8 @@ public class ExamService {
     public Exam getExamById(Long id) {
         return examRepo.findById(id).orElseThrow(() -> new RuntimeException("Exam không tồn tại"));
     }
+
+    public void deleteExamById(Long id) {
+        examRepo.deleteById(id);
+    }
 }

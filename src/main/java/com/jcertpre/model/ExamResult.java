@@ -18,14 +18,14 @@ public class ExamResult {
 
     private LocalDate examDate;
 
-    private LocalDateTime startTime;  // thời gian bắt đầu làm bài
+    private LocalDateTime startTime;
 
-    private LocalDateTime endTime;    // thời gian kết thúc làm bài
+    private LocalDateTime endTime;
 
-    private int durationMinutes;      // thời gian làm bài (phút)
+    private int durationMinutes;
 
     @ElementCollection
-    private List<String> submittedAnswers;
+    private List<String> submittedAnswers; // danh sách A/B/C/D học viên chọn
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exam_id")
@@ -34,84 +34,33 @@ public class ExamResult {
     private boolean isRetake;
 
     // Getter & Setter
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getStudentName() { return studentName; }
+    public void setStudentName(String studentName) { this.studentName = studentName; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public double getScore() { return score; }
+    public void setScore(double score) { this.score = score; }
 
-    public String getStudentName() {
-        return studentName;
-    }
+    public LocalDate getExamDate() { return examDate; }
+    public void setExamDate(LocalDate examDate) { this.examDate = examDate; }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
 
-    public double getScore() {
-        return score;
-    }
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
 
-    public void setScore(double score) {
-        this.score = score;
-    }
+    public int getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
 
-    public LocalDate getExamDate() {
-        return examDate;
-    }
+    public List<String> getSubmittedAnswers() { return submittedAnswers; }
+    public void setSubmittedAnswers(List<String> submittedAnswers) { this.submittedAnswers = submittedAnswers; }
 
-    public void setExamDate(LocalDate examDate) {
-        this.examDate = examDate;
-    }
+    public Exam getExam() { return exam; }
+    public void setExam(Exam exam) { this.exam = exam; }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public int getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setDurationMinutes(int durationMinutes) {
-        this.durationMinutes = durationMinutes;
-    }
-
-    public List<String> getSubmittedAnswers() {
-        return submittedAnswers;
-    }
-
-    public void setSubmittedAnswers(List<String> submittedAnswers) {
-        this.submittedAnswers = submittedAnswers;
-    }
-
-    public Exam getExam() {
-        return exam;
-    }
-
-    public void setExam(Exam exam) {
-        this.exam = exam;
-    }
-
-    public boolean isRetake() {
-        return isRetake;
-    }
-
-    public void setRetake(boolean retake) {
-        isRetake = retake;
-    }
+    public boolean isRetake() { return isRetake; }
+    public void setRetake(boolean retake) { isRetake = retake; }
 }

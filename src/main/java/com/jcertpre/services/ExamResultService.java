@@ -17,12 +17,16 @@ public class ExamResultService {
     public ExamResult submitExam(Exam exam, String studentName, List<String> answers) {
         LocalDateTime start = LocalDateTime.now();
         double score = 0;
-        var corrects = exam.getCorrectAnswers();
-        int n = Math.min(corrects.size(), answers.size());
+        var quizItems = exam.getQuizItems();
+        int n = Math.min(quizItems.size(), answers.size());
+
         for (int i = 0; i < n; i++) {
-            if (corrects.get(i).equalsIgnoreCase(answers.get(i))) score++;
+            if (quizItems.get(i).getCorrectAnswer().equalsIgnoreCase(answers.get(i))) {
+                score++;
+            }
         }
-        double finalScore = (score / corrects.size()) * 10.0;
+        double finalScore = (score / quizItems.size()) * 10.0;
+
         ExamResult er = new ExamResult();
         er.setExam(exam);
         er.setStudentName(studentName);
