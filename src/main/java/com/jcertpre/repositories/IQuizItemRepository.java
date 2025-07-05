@@ -1,9 +1,9 @@
 package com.jcertpre.repositories;
 
-import com.jcertpre.model.Exam;
+import com.jcertpre.model.QuizItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IExamRepository extends JpaRepository<Exam, Long> {
+public interface IQuizItemRepository extends JpaRepository<QuizItem, Long> {
 }

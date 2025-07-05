@@ -1,11 +1,9 @@
 package com.jcertpre.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
-@Table(name = "exams")
 public class Exam {
 
     @Id
@@ -14,61 +12,31 @@ public class Exam {
 
     private String title;
 
-    @ElementCollection
-    @CollectionTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"))
-    @Column(name = "question")
-    private List<String> questions;
+    private String description;
 
-    @ElementCollection
-    @CollectionTable(name = "exam_correct_answers", joinColumns = @JoinColumn(name = "exam_id"))
-    @Column(name = "correct_answer")
-    private List<String> correctAnswers;
+    private int durationMinutes;
 
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OptionGroup> optionGroups;
+    @ManyToMany
+    @JoinTable(
+            name = "exam_quizitem",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "quizitem_id")
+    )
+    private List<QuizItem> quizItems;
 
-    public Exam() {}
+    // Getter & Setter
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Exam(String title, List<String> questions, List<OptionGroup> optionGroups, List<String> correctAnswers) {
-        this.title = title;
-        this.questions = questions;
-        this.optionGroups = optionGroups;
-        this.correctAnswers = correctAnswers;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getTitle() {
-        return title;
-    }
+    public int getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<String> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<String> questions) {
-        this.questions = questions;
-    }
-
-    public List<String> getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(List<String> correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
-
-    public List<OptionGroup> getOptionGroups() {
-        return optionGroups;
-    }
-
-    public void setOptionGroups(List<OptionGroup> optionGroups) {
-        this.optionGroups = optionGroups;
-    }
+    public List<QuizItem> getQuizItems() { return quizItems; }
+    public void setQuizItems(List<QuizItem> quizItems) { this.quizItems = quizItems; }
 }
