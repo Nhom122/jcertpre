@@ -1,10 +1,10 @@
 package com.jcertpre.model;
 
 import jakarta.persistence.*;
+import java.time.Duration;
 import java.util.List;
 
 @Entity
-@Table(name = "exams")
 public class Exam {
 
     @Id
@@ -13,30 +13,23 @@ public class Exam {
 
     private String title;
 
+    private String description;
+
+    private int durationMinutes; // thời gian làm bài (phút)
+
     @ElementCollection
-    @CollectionTable(name = "exam_questions", joinColumns = @JoinColumn(name = "exam_id"))
-    @Column(name = "question")
     private List<String> questions;
 
     @ElementCollection
-    @CollectionTable(name = "exam_correct_answers", joinColumns = @JoinColumn(name = "exam_id"))
-    @Column(name = "correct_answer")
     private List<String> correctAnswers;
 
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OptionGroup> optionGroups;
-
-    public Exam() {}
-
-    public Exam(String title, List<String> questions, List<OptionGroup> optionGroups, List<String> correctAnswers) {
-        this.title = title;
-        this.questions = questions;
-        this.optionGroups = optionGroups;
-        this.correctAnswers = correctAnswers;
-    }
-
+    // Getter & Setter
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -45,6 +38,22 @@ public class Exam {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
     }
 
     public List<String> getQuestions() {
@@ -61,13 +70,5 @@ public class Exam {
 
     public void setCorrectAnswers(List<String> correctAnswers) {
         this.correctAnswers = correctAnswers;
-    }
-
-    public List<OptionGroup> getOptionGroups() {
-        return optionGroups;
-    }
-
-    public void setOptionGroups(List<OptionGroup> optionGroups) {
-        this.optionGroups = optionGroups;
     }
 }

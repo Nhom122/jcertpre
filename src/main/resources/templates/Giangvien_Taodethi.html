@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tạo Đề Thi Mới</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container mt-4">
+  <h2>📝 Tạo đề thi mới</h2>
+  <form th:action="@{/exam/create}" method="post">
+    <div class="form-group">
+      <label>Tiêu đề đề thi</label>
+      <input type="text" name="title" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+      <label>Mô tả</label>
+      <textarea name="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Thời gian làm bài (phút)</label>
+      <input type="number" name="durationMinutes" class="form-control" min="1" required />
+    </div>
+
+    <div class="form-group">
+      <label>Danh sách câu hỏi (mỗi câu 1 dòng)</label>
+      <textarea name="questionsRaw" class="form-control" rows="5" required placeholder="Câu 1\nCâu 2\n..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Danh sách đáp án đúng (mỗi đáp án 1 dòng, tương ứng thứ tự câu hỏi)</label>
+      <textarea name="answersRaw" class="form-control" rows="5" required placeholder="Đáp án 1\nĐáp án 2\n..."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">✅ Tạo đề thi</button>
+  </form>
+</div>
+</body>
+</html>

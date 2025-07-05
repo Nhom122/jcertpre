@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8">
+  <title>Kết quả thi</title><link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"></head><body>
+<div class="container mt-4">
+  <h2>Kết quả bài thi</h2>
+  <p><strong>Điểm:</strong> <span th:text="${result.score}"></span></p>
+  <a th:href="@{/exam/review/{id}(id=${result.id})}" class="btn btn-info">Xem lại</a>
+  <a th:href="@{/exam/retry/{exam.id}(exam=${result.exam.id})}" class="btn btn-warning">Thi lại</a>
+</div></body></html>

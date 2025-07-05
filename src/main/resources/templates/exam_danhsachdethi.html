@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chọn Đề Thi</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container mt-4">
+  <h2>📝 Chọn Đề Thi</h2>
+  <div th:if="${exams != null}">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Tiêu đề</th>
+        <th>Mô tả</th>
+        <th>Thời gian (phút)</th>
+        <th>Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="exam : ${exams}">
+        <td th:text="${exam.title}">Tiêu đề</td>
+        <td th:text="${exam.description}">Mô tả</td>
+        <td th:text="${exam.durationMinutes}">0</td>
+        <td>
+          <a th:href="@{'/exam/take/' + ${exam.id}}" class="btn btn-primary">Làm bài</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${exams == null || exams.isEmpty()}">
+    <p>Chưa có đề thi nào để làm.</p>
+  </div>
+</div>
+</body>
+</html>

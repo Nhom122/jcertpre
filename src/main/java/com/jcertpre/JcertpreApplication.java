@@ -1,7 +1,5 @@
 package com.jcertpre;
 
-import com.jcertpre.model.User;
-import com.jcertpre.repositories.IUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

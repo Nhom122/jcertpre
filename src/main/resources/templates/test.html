@@ -2,58 +2,52 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang Quản Trị</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Xem lại bài thi: <span th:text="${exam.title}">Tiêu đề</span></title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .correct { color: green; font-weight: bold; }
+        .wrong { color: red; font-weight: bold; }
+    </style>
 </head>
 <body>
 <div class="container mt-4">
-    <h2 class="mb-3">🛠️ Trang Quản Trị Hệ Thống</h2>
-    <p>Chào mừng bạn, Admin! Dưới đây là tổng quan hệ thống và các chức năng quản lý.</p>
+    <h2>🔍 Xem lại bài thi: <span th:text="${exam.title}"></span></h2>
+    <p><strong>Mô tả:</strong> <span th:text="${exam.description}"></span></p>
+    <p><strong>Điểm đạt được:</strong> <span th:text="${examResult.score}"></span> / <span th:text="${exam.totalPoints}"></span></p>
 
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">👥 Tổng số người dùng</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${totalUsers}">0</h5>
-                </div>
-            </div>
-        </div>
+    <div th:each="question, iterStat : ${exam.questions}">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 th:text="'Câu ' + (${iterStat.index} + 1) + ': ' + question.text"></h5>
 
-        <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">📚 Khóa học chờ duyệt</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${pendingCourses}">0</h5>
-                </div>
-            </div>
-        </div>
+                <ul>
+                    <li th:each="opt : ${question.options}"
+                        th:text="opt"
+                        th:classappend="${opt == examResult.answers[iterStat.index]} ? 'font-weight-bold' : ''">
+                        Option
+                    </li>
+                </ul>
 
-        <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-header">📩 Phản hồi chưa xử lý</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${pendingFeedbacks}">0</h5>
-                </div>
+                <p>
+                    <strong>Đáp án học viên:</strong>
+                    <span th:text="${examResult.answers[iterStat.index]}"></span>
+                </p>
+                <p>
+                    <strong>Đáp án đúng:</strong>
+                    <span th:text="${question.correctAnswer}" class="correct"></span>
+                </p>
+                <p th:if="${examResult.answers[iterStat.index] == question.correctAnswer}">
+                    <span class="correct">Bạn trả lời đúng ✔️</span>
+                </p>
+                <p th:if="${examResult.answers[iterStat.index] != question.correctAnswer}">
+                    <span class="wrong">Bạn trả lời sai ✘</span>
+                </p>
             </div>
         </div>
     </div>
 
-    <hr>
-
-    <h4 class="mt-4">🔧 Các chức năng quản trị</h4>
-    <div class="list-group">
-        <a href="/admin/users" class="list-group-item list-group-item-action">👤 Quản lý người dùng</a>
-        <a href="/admin/courses/pending" class="list-group-item list-group-item-action">📘 Duyệt khóa học</a>
-        <a href="/admin/consultations/pending" class="list-group-item list-group-item-action">🗓️ Duyệt lịch tư vấn</a>
-        <a href="/admin/feedback" class="list-group-item list-group-item-action">📬 Xử lý phản hồi học viên</a>
-        <a href="/admin/reports" class="list-group-item list-group-item-action">📈 Báo cáo tổng hợp</a>
-    </div>
+    <a th:href="@{/exam/take/{id}(id=${exam.id})}" class="btn btn-primary">Thi lại</a>
+    <a th:href="@{/exam/list}" class="btn btn-secondary">Về danh sách đề thi</a>
 </div>
-
-<!-- Optional JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
