@@ -33,8 +33,6 @@ public class InstructorController {
 
     // ====================== BÀI GIẢNG ==========================
 
-
-
     @PostMapping("/courses/{courseId}/add-lesson")
     public String addLesson(@PathVariable Long courseId,
                             @ModelAttribute Lesson lesson,
@@ -138,11 +136,17 @@ public class InstructorController {
 
     // ====================== LIVESTREAM ==========================
 
-    // 👇 Thêm GET để hiện form tạo livestream
     @GetMapping("/livestream/create")
     public String showCreateLivestreamForm(Model model) {
-        model.addAttribute("livestream", new Livestream()); // tạo object trống cho form
-        return "Giangvien_livestream"; // tên file HTML (đặt trong /templates)
+        model.addAttribute("livestream", new Livestream());
+        return "Giangvien_themlivestream";
+    }
+
+    @GetMapping("/livestream/manage")
+    public String manageLivestreams(@SessionAttribute("currentUser") User instructor, Model model) {
+        List<Livestream> livestreams = instructorService.getLivestreamsByInstructor(instructor.getId());
+        model.addAttribute("livestreams", livestreams);
+        return "GiangVien_QuanLyLivestream";
     }
 
     @PostMapping("/livestream/create")
@@ -157,12 +161,52 @@ public class InstructorController {
             livestream.setInstructor(instructor);
 
             instructorService.scheduleLivestream(livestream, instructor);
-
             redirectAttributes.addFlashAttribute("message", "Tạo lịch livestream thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Lỗi khi tạo lịch livestream.");
         }
 
         return "redirect:/instructor/livestream/create";
+    }
+
+    // 👉 Cập nhật livestream
+    @PostMapping("/livestream/update")
+    public String updateLivestream(@RequestParam Long id,
+                                   @RequestParam String title,
+                                   @RequestParam String scheduledAt,
+                                   @RequestParam String meetingLink,
+                                   @RequestParam String description,
+                                   @SessionAttribute("currentUser") User instructor,
+                                   RedirectAttributes redirectAttributes) {
+        Livestream stream = instructorService.findLivestreamById(id);
+        if (stream == null || !stream.getInstructor().getId().equals(instructor.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Không có quyền chỉnh sửa.");
+            return "redirect:/instructor/livestream/manage";
+        }
+
+        stream.setTitle(title);
+        stream.setScheduledAt(LocalDateTime.parse(scheduledAt));
+        stream.setMeetingLink(meetingLink);
+        stream.setDescription(description);
+        instructorService.saveLivestream(stream);
+
+        redirectAttributes.addFlashAttribute("message", "Cập nhật livestream thành công.");
+        return "redirect:/instructor/livestream/manage";
+    }
+
+    // 👉 Xóa livestream
+    @PostMapping("/livestream/delete/{id}")
+    public String deleteLivestream(@PathVariable Long id,
+                                   @SessionAttribute("currentUser") User instructor,
+                                   RedirectAttributes redirectAttributes) {
+        Livestream stream = instructorService.findLivestreamById(id);
+        if (stream == null || !stream.getInstructor().getId().equals(instructor.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Không có quyền xóa.");
+            return "redirect:/instructor/livestream/manage";
+        }
+
+        instructorService.deleteLivestreamById(id);
+        redirectAttributes.addFlashAttribute("message", "Đã xóa livestream.");
+        return "redirect:/instructor/livestream/manage";
     }
 }

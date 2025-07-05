@@ -46,6 +46,18 @@ public class AdminController {
         return "Admin_quanli"; // Trang quản lý người dùng
     }
 
+    // ✅ Tạo người dùng mới (từ admin)
+    @PostMapping("/users/create")
+    public String createUser(@ModelAttribute User user, Model model) {
+        try {
+            userService.createUser(user); // Cần có trong UserService
+            model.addAttribute("message", "Tạo người dùng thành công!");
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/users";
+    }
+
     // ✅ Cập nhật người dùng
     @PostMapping("/users/update/{id}")
     public String updateUser(@PathVariable Long id, @ModelAttribute User user, Model model) {

@@ -76,6 +76,19 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    // Tạo người dùng từ phía Admin
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại.");
+        }
+
+        // ⚠️ Nếu bạn muốn bảo mật hơn, hãy mã hóa mật khẩu ở đây:
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
+    }
+
+
 
 
 }

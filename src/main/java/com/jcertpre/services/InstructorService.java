@@ -100,18 +100,21 @@ public class InstructorService {
         return livestreamRepository.findByInstructorId(instructorId);
     }
 
-    // ========== FEEDBACK ==========
-
-    public List<Feedback> getPendingFeedback() {
-        return feedbackRepository.findByStatus(Feedback.Status.PENDING);
+    // Tìm Livestream theo ID
+    public Livestream findLivestreamById(Long id) {
+        return livestreamRepository.findById(id).orElse(null);
     }
 
-    public Feedback respondToFeedback(Long feedbackId, String response) {
-        Feedback feedback = feedbackRepository.findById(feedbackId)
-                .orElseThrow(() -> new RuntimeException("Feedback not found"));
-
-        feedback.setResponse(response);
-        feedback.setStatus(Feedback.Status.RESOLVED);
-        return feedbackRepository.save(feedback);
+    // Cập nhật Livestream
+    public Livestream saveLivestream(Livestream livestream) {
+        return livestreamRepository.save(livestream);
     }
+
+    // Xóa Livestream
+    public void deleteLivestreamById(Long id) {
+        livestreamRepository.deleteById(id);
+    }
+
+
+
 }
