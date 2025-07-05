@@ -72,4 +72,35 @@ public class AuthController {
         return "redirect:/login";
     }
 
+    // 👉 Hiển thị trang đăng nhập riêng cho Admin
+    @GetMapping("/admin/login")
+    public String adminLoginPage() {
+        return "Admin_login"; // Tên file HTML: Admin_login.html
+    }
+
+    // ✅ Xử lý đăng nhập Admin riêng
+    @PostMapping("/api/login/admin")
+    public String adminLogin(@RequestParam String email,
+                             @RequestParam String password,
+                             HttpSession session,
+                             Model model) {
+        try {
+            User user = userService.loginUser(email, password);
+
+            // Kiểm tra vai trò có phải ADMIN không
+            if (user.getRole() != User.Role.ADMIN) {
+                model.addAttribute("error", "Bạn không có quyền truy cập trang admin.");
+                return "Admin_login";
+            }
+
+            session.setAttribute("currentUser", user);
+            return "redirect:/admin/dashboard";
+
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "Admin_login";
+        }
+    }
+
+
 }

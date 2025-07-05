@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Livestream</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>🎥 Quản Lý Livestream</h2>
+    <div th:if="${livestreams.size() == 0}" class="alert alert-info">Chưa có buổi livestream nào.</div>
+
+    <table class="table table-bordered mt-3" th:if="${livestreams.size() > 0}">
+        <thead class="thead-light">
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Thời gian bắt đầu</th>
+            <th>Link</th>
+            <th>Mô tả</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="stream : ${livestreams}">
+            <td th:text="${stream.title}">Tiêu đề</td>
+            <td th:text="${#temporals.format(stream.scheduledAt, 'dd/MM/yyyy HH:mm')}">Thời gian</td>
+            <td><a th:href="${stream.meetingLink}" target="_blank" th:text="${stream.meetingLink}">Link</a></td>
+            <td th:text="${stream.description}">Mô tả</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/jcertpre/instructor/livestream/create" class="btn btn-primary">➕ Tạo Livestream mới</a>
+</div>
+</body>
+</html>

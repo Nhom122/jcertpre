@@ -142,7 +142,14 @@ public class InstructorController {
     @GetMapping("/livestream/create")
     public String showCreateLivestreamForm(Model model) {
         model.addAttribute("livestream", new Livestream()); // tạo object trống cho form
-        return "Giangvien_livestream"; // tên file HTML (đặt trong /templates)
+        return "Giangvien_themlivestream"; // tên file HTML (đặt trong /templates)
+    }
+
+    @GetMapping("/livestream/manage")
+    public String manageLivestreams(@SessionAttribute("currentUser") User instructor, Model model) {
+        List<Livestream> livestreams = instructorService.getLivestreamsByInstructor(instructor.getId());
+        model.addAttribute("livestreams", livestreams);
+        return "GiangVien_QuanLyLivestream";
     }
 
     @PostMapping("/livestream/create")

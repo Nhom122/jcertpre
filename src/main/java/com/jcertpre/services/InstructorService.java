@@ -100,18 +100,5 @@ public class InstructorService {
         return livestreamRepository.findByInstructorId(instructorId);
     }
 
-    // ========== FEEDBACK ==========
 
-    public List<Feedback> getPendingFeedback() {
-        return feedbackRepository.findByStatus(Feedback.Status.PENDING);
-    }
-
-    public Feedback respondToFeedback(Long feedbackId, String response) {
-        Feedback feedback = feedbackRepository.findById(feedbackId)
-                .orElseThrow(() -> new RuntimeException("Feedback not found"));
-
-        feedback.setResponse(response);
-        feedback.setStatus(Feedback.Status.RESOLVED);
-        return feedbackRepository.save(feedback);
-    }
 }
