@@ -1,33 +1,129 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Danh sách câu hỏi</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý câu hỏi học viên</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+    }
+    .question-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .answered {
+      background-color: #f0f0f0;
+      color: #a0a0a0;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2>Danh sách câu hỏi từ sinh viên</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Chủ đề</th>
-            <th>Nội dung</th>
-            <th>Thời gian</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="q : ${questions}">
-            <td th:text="${q.studentName}"></td>
-            <td th:text="${q.email}"></td>
-            <td th:text="${q.subject}"></td>
-            <td th:text="${q.content}"></td>
-            <td th:text="${#temporals.format(q.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<!-- Header -->
+<header class="bg-blue-600 text-white shadow-md">
+  <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Quản lý câu hỏi học viên</h1>
+    <a th:href="@{/advisor/dashboard}" class="px-4 py-2 bg-blue-700 rounded-md hover:bg-blue-800 transition">Trang chủ</a>
+  </div>
+</header>
+
+<!-- Nội dung chính -->
+<main class="container mx-auto px-4 py-8">
+  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="border-b border-gray-200 px-6 py-4 bg-blue-50">
+      <h2 class="text-lg font-semibold text-blue-700">Danh sách câu hỏi gần đây</h2>
+    </div>
+
+    <div id="questionsContainer" class="divide-y divide-gray-200">
+      <div th:if="${#lists.isEmpty(questions)}" class="p-6 text-center text-gray-500">
+        <p>Chưa có câu hỏi nào.</p>
+      </div>
+
+      <div th:each="q, iterStat : ${questions}"
+           th:id="'question-' + ${q.id}"
+           th:class="'question-item px-6 py-4 transition-all ' + (${q.reply} != null ? 'answered' : 'hover:bg-blue-50 cursor-pointer')">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="font-medium text-blue-800" th:text="${q.subject}"></h3>
+            <p class="text-sm text-gray-500 mt-1">
+              <span th:text="'Người hỏi: ' + ${q.studentName} + ' (' + ${q.email} + ')'"></span><br/>
+              <span th:text="'Đăng lúc: ' + ${#temporals.format(q.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+            </p>
+          </div>
+          <span th:class="'text-sm font-semibold ' + (${q.reply} != null ? 'text-green-600' : 'text-red-600')"
+                th:text="${q.reply} != null ? 'Đã trả lời' : 'Chưa trả lời'"></span>
+        </div>
+
+        <!-- Nội dung + Phản hồi (ẩn mặc định) -->
+        <div class="question-details mt-4 text-gray-700" style="display: none;">
+          <div class="mb-2">
+            <strong class="text-gray-800">Nội dung:</strong>
+            <p th:text="${q.content}"></p>
+          </div>
+
+          <div th:if="${q.reply == null}">
+            <form th:action="@{/questions/answer}" method="post" class="mt-4">
+              <input type="hidden" name="id" th:value="${q.id}" />
+              <textarea name="reply" class="w-full border border-gray-300 rounded-md p-2" rows="3"
+                        placeholder="Nhập phản hồi..."></textarea>
+              <div class="flex justify-between items-center mt-3">
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                  Gửi phản hồi
+                </button>
+                <form th:action="@{/questions/delete}" method="post"
+                      onsubmit="return confirm('Bạn có chắc muốn xóa câu hỏi này không?')">
+                  <input type="hidden" name="id" th:value="${q.id}" />
+                  <button type="submit" class="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                    Xóa
+                  </button>
+                </form>
+              </div>
+            </form>
+          </div>
+
+          <div th:if="${q.reply != null}" class="mt-4 bg-gray-100 p-3 rounded-md">
+            <strong>Phản hồi:</strong>
+            <p th:text="${q.reply}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Script đóng mở -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const questionItems = document.querySelectorAll(".question-item");
+
+    questionItems.forEach(item => {
+      const details = item.querySelector(".question-details");
+      const isAnswered = item.classList.contains("answered");
+
+      if (!isAnswered) {
+        item.addEventListener("click", function (e) {
+          if (e.target.tagName === "TEXTAREA" || e.target.tagName === "BUTTON" || e.target.closest("form")) return;
+
+          // Ẩn tất cả khối khác trước
+          document.querySelectorAll(".question-details").forEach(d => {
+            if (d !== details) d.style.display = "none";
+          });
+
+          // Toggle chính nó
+          if (details.style.display === "none") {
+            details.style.display = "block";
+          } else {
+            details.style.display = "none";
+          }
+        });
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

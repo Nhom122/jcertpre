@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <title>👨‍🏫 Trang Chủ Giảng Viên</title>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>👨‍🏫 Chào mừng, Giảng viên!</h1>
+    <p>Hãy chọn một chức năng bên dưới để bắt đầu công việc</p>
+
+    <div class="row mt-4">
+
+        <!-- Quản lý khóa học -->
+        <div class="col-md-6 mb-3">
+            <a th:href="@{/advisor/courses}" class="btn btn-success btn-block btn-lg">👤 Quản lý khóa học</a>
+        </div>
+
+        <!-- bài giảng -->
+        <div class="col-md-6 mb-3">
+            <a href="/jcertpre/instructor/lessons/all" class="btn btn-primary btn-block btn-lg">📋 Tất Cả Bài Giảng</a>
+        </div>
+
+        <!-- Lên lịch livestream -->
+        <div class="col-md-6 mb-3">
+            <a href="/jcertpre/instructor/livestream/create" class="btn btn-primary btn-block btn-lg">🎥 Lên Lịch Livestream</a>
+        </div>
+
+        <!-- Xem Câu hỏi của hoc viên -->
+        <div class="col-md-6 mb-3">
+            <a th:href="@{/questions}" class="btn btn-secondary btn-block btn-lg">📨 Xem Câu Hỏi Từ Học Viên</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký - JCertPre</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f1f5f9; padding: 2rem; }
+        h1 { text-align: center; color: #0c4a6e; }
+        form { max-width: 500px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
+        input, select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+        #examTargetGroup { display: none; }
+        button, .back-button {
+            background: #0c4a6e;
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+        .back-button {
+            background: #64748b; /* Màu xám xanh */
+        }
+    </style>
+    <script>
+        function toggleExamTarget() {
+            const role = document.getElementById("role")?.value;
+            const targetGroup = document.getElementById("examTargetGroup");
+            if (role && targetGroup) {
+                targetGroup.style.display = (role === "LEARNER") ? "block" : "none";
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Đăng ký tài khoản</h1>
+<form th:action="@{/api/register/learner}" method="post">
+    <div class="form-group">
+        <label for="name">Họ tên</label>
+        <input type="text" id="name" name="fullName" required/>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required/>
+        <p th:if="${error}" th:text="${error}" style="color: red; margin-top: 0.5rem;"></p>
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" name="password" required/>
+    </div>
+    <div class="form-group" id="examTargetGroup">
+        <label for="examTarget">Mục tiêu thi</label>
+        <select id="examTarget" name="examTarget">
+            <option value="JLPT_N5">JLPT N5</option>
+            <option value="JLPT_N4">JLPT N4</option>
+            <option value="JLPT_N3">JLPT N3</option>
+            <option value="JLPT_N2">JLPT N2</option>
+            <option value="NAT_TEST">NAT-TEST</option>
+        </select>
+    </div>
+    <button type="submit">Đăng ký</button>
+</form>
+
+<a th:href="@{/login}" class="back-button">Quay lại đăng nhập</a>
+
+</body>
+</html>
