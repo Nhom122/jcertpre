@@ -22,6 +22,10 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> getApprovedCourses() {
+        return courseRepository.findByApproved(true);
+    }
+
     public List<Course> getPendingCourses() {
         return courseRepository.findByApproved(false);
     }

@@ -3,19 +3,23 @@ package com.jcertpre.controller;
 import com.jcertpre.model.Exam;
 import com.jcertpre.model.QuizItem;
 import com.jcertpre.model.ExamResult;
+import com.jcertpre.model.User;
 import com.jcertpre.services.ExamResultService;
 import com.jcertpre.services.ExamService;
 import com.jcertpre.services.QuizItemService;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/exam")
+@RequestMapping("/instructor/exam")
 public class ExamController {
 
     @Autowired
@@ -30,14 +34,14 @@ public class ExamController {
     @GetMapping("/list")
     public String list(Model m) {
         m.addAttribute("exams", examService.getAllExams());
-        return "exam_list";
+        return "exam_danhsachdethi";
     }
 
     @GetMapping("/create")
     public String createForm(Model m) {
         List<QuizItem> quizItems = quizItemService.getAllQuizItems();
         m.addAttribute("quizItems", quizItems);
-        return "exam_create";
+        return "exam_Taodethi";
     }
 
     @PostMapping("/create")
@@ -63,7 +67,7 @@ public class ExamController {
 
         examService.createExam(exam);
 
-        return "redirect:/exam/list";
+        return "redirect:/instructor/exam/list";
     }
 
     // ----- PHẦN SỬA -----
@@ -96,16 +100,16 @@ public class ExamController {
         exam.setDescription(description);
         exam.setDurationMinutes(durationMinutes);
 
-        List<QuizItem> selectedQuizItems = quizItemService.getAllQuizItems()
-                .stream()
-                .filter(q -> quizItemIds.contains(q.getId()))
-                .toList();
-
+        List<QuizItem> selectedQuizItems = new ArrayList<>(
+                quizItemService.getAllQuizItems()
+                        .stream()
+                        .filter(q -> quizItemIds.contains(q.getId()))
+                        .toList()
+        );
         exam.setQuizItems(selectedQuizItems);
 
-        examService.createExam(exam); // dùng createExam vì save() trong service có thể update
-
-        return "redirect:/exam/list";
+        examService.createExam(exam); // dùng createExam vì save() có thể update
+        return "redirect:/instructor/exam/list";
     }
 
     // ----- PHẦN XÓA -----
@@ -113,7 +117,7 @@ public class ExamController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         examService.deleteExamById(id);
-        return "redirect:/exam/list";
+        return "redirect:/instructor/exam/list";
     }
 
 
@@ -123,17 +127,41 @@ public class ExamController {
     public String take(@PathVariable Long id, Model m) {
         Exam e = examService.getExamById(id);
         m.addAttribute("exam", e);
-        return "exam_take";
+        m.addAttribute("choices", List.of("A", "B", "C", "D"));
+        return "exam_lambai";
     }
 
     @PostMapping("/submit")
     public String submit(@RequestParam Long examId,
-                         @RequestParam("answers") List<String> answers,
-                         @SessionAttribute("currentUser") String studentName, Model m) {
+                         @RequestParam Map<String, String> params,
+                         HttpSession session,
+                         Model m) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
+            return "redirect:/jcertpre/login?error=sessionExpired";
+        }
+
+        List<String> answers = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (entry.getKey().startsWith("answers[")) {
+                answers.add(entry.getValue());
+            }
+        }
+
+        String studentName = user.getFullName();
+
         Exam e = examService.getExamById(examId);
+
+        System.out.println("Answers submitted: " + answers.size());
+        System.out.println("Answers: " + answers);
+
+
         ExamResult er = resultService.submitExam(e, studentName, answers);
-        return "redirect:/exam/result/" + er.getId();
+        return "redirect:/instructor/exam/result/" + er.getId();
     }
+
+
 
     @GetMapping("/result/{id}")
     public String result(@PathVariable Long id, Model m) {
@@ -141,20 +169,22 @@ public class ExamController {
         Exam exam = examService.getExamById(er.getExam().getId());
         m.addAttribute("exam", exam);
         m.addAttribute("examResult", er);
-        return "exam_result";
+        return "exam_ketqua";
     }
 
     @GetMapping("/review/{id}")
     public String review(@PathVariable Long id, Model m) {
         ExamResult er = resultService.findById(id);
         Exam exam = examService.getExamById(er.getExam().getId());
+        List<String> optionLabels = List.of("A", "B", "C", "D");
+        m.addAttribute("optionLabels", optionLabels);
         m.addAttribute("exam", exam);
         m.addAttribute("examResult", er);
-        return "exam_review";
+        return "exam_xemlaidethi";
     }
 
     @GetMapping("/retry/{examId}")
     public String retry(@PathVariable Long examId) {
-        return "redirect:/exam/take/" + examId;
+        return "redirect:/instructor/exam/take/" + examId;
     }
 }

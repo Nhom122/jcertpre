@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tất Cả Bài Giảng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <!-- Nút Trang chủ bên phải -->
+    <div class="d-flex justify-content-end mb-3">
+        <a th:href="@{/advisor/dashboard}" class="btn btn-outline-primary">Trang chủ</a>
+    </div>
+
+    <h2 class="mb-4 text-primary">📚 Tất cả bài giảng của bạn</h2>
+
+    <div th:if="${#maps.isEmpty(lessonsByCourse)}" class="alert alert-info">
+        Bạn chưa tạo khóa học nào.
+    </div>
+
+    <div th:each="entry : ${lessonsByCourse}">
+        <h4 th:text="'📘 ' + ${entry.key.title}">Tên khóa học</h4>
+
+        <table class="table table-bordered" th:if="${!#lists.isEmpty(entry.value)}">
+            <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>Tiêu đề</th>
+                <th>Video</th>
+                <th>Slide</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lesson, stat : ${entry.value}">
+                <td th:text="${stat.count}">1</td>
+                <td th:text="${lesson.title}">Bài giảng</td>
+                <td>
+                    <a th:if="${lesson.videoUrl != null}" th:href="${lesson.videoUrl}" target="_blank">Xem Video</a>
+                    <span th:if="${lesson.videoUrl == null}">Không có</span>
+                </td>
+                <td>
+                    <a th:if="${lesson.slideUrl != null}" th:href="${lesson.slideUrl}" target="_blank">Xem Slide</a>
+                    <span th:if="${lesson.slideUrl == null}">Không có</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(entry.value)}" class="text-muted ml-3">Chưa có bài giảng nào.</div>
+        <hr />
+    </div>
+</div>
+</body>
+</html>

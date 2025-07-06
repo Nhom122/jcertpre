@@ -18,14 +18,20 @@ public class ExamResultService {
         LocalDateTime start = LocalDateTime.now();
         double score = 0;
         var quizItems = exam.getQuizItems();
-        int n = Math.min(quizItems.size(), answers.size());
+        int n = quizItems.size();
 
         for (int i = 0; i < n; i++) {
-            if (quizItems.get(i).getCorrectAnswer().equalsIgnoreCase(answers.get(i))) {
+            String correct = quizItems.get(i).getCorrectAnswer();
+            String submitted = i < answers.size() ? answers.get(i) : null;
+
+            if (submitted != null &&
+                    correct != null &&
+                    correct.trim().equalsIgnoreCase(submitted.trim())) {
                 score++;
             }
         }
-        double finalScore = (score / quizItems.size()) * 10.0;
+
+        double finalScore = (score / n) * 10.0;
 
         ExamResult er = new ExamResult();
         er.setExam(exam);
@@ -34,8 +40,10 @@ public class ExamResultService {
         er.setScore(finalScore);
         er.setStartTime(start);
         er.setEndTime(LocalDateTime.now());
+
         return resultRepo.save(er);
     }
+
 
     public List<ExamResult> findByStudent(String studentName) {
         return resultRepo.findByStudentName(studentName);

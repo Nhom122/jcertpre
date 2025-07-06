@@ -8,7 +8,7 @@
 <body>
 <div class="container mt-4">
   <h2>📝 Quản lý đề thi</h2>
-  <a href="/exam/create" class="btn btn-primary mb-3">➕ Tạo đề thi mới</a>
+  <a href="/jcertpre/instructor/exam/create" class="btn btn-primary mb-3">➕ Tạo đề thi mới</a>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -24,8 +24,8 @@
       <td th:text="${exam.description}"></td>
       <td th:text="${exam.durationMinutes}"></td>
       <td>
-        <a th:href="@{'/exam/edit/' + ${exam.id}}" class="btn btn-warning btn-sm">Sửa</a>
-        <a th:href="@{'/exam/delete/' + ${exam.id}}"
+        <a th:href="@{'/instructor/exam/edit/' + ${exam.id}}" class="btn btn-warning btn-sm">Sửa</a>
+        <a th:href="@{'/instructor/exam/delete/' + ${exam.id}}"
            onclick="return confirm('Bạn có chắc muốn xóa đề thi này?');"
            class="btn btn-danger btn-sm">Xóa</a>
       </td>

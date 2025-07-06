@@ -22,8 +22,12 @@ public class JcertpreApplication {
 	public CommandLineRunner loadTestAdvisor(IUserRepository userRepository) {
 		return args -> {
 			String learnerEmail = "a@gmail.com";
-			String advisorEmail = "advisor@example.com";
-			User learner = new User(learnerEmail, "123456", "a", User.Role.LEARNER);
+			String advisorEmail = "advisor@gmail.com";
+			User instructor = new User("instructor@gmail.com", "123456", "instructor", User.Role.INSTRUCTOR);
+			userRepository.save(instructor);
+			User admin = new User("admin@gmail.com", "123456", "admin", User.Role.ADMIN);
+			userRepository.save(admin);
+			User learner = new User(learnerEmail, "123456", "learned", User.Role.LEARNER);
 			userRepository.save(learner);
 			if (!userRepository.existsByEmail(advisorEmail)) {
 				User advisor = new User(advisorEmail, "123456", "Cố Vấn Nguyễn Văn A", User.Role.ADVISOR);

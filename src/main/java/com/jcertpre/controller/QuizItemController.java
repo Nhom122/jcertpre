@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/quizitem")
+@RequestMapping("/instructor/quizitem")
 public class QuizItemController {
 
     @Autowired
@@ -19,13 +19,13 @@ public class QuizItemController {
     @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("quizItems", quizItemService.getAllQuizItems());
-        return "quizitem_list";
+        return "Quiz_danhsachcauhoi";
     }
 
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("quizItem", new QuizItem());
-        return "quizitem_create";
+        return "Quiz_taocauhoi";
     }
 
     @PostMapping("/create")
@@ -37,6 +37,6 @@ public class QuizItemController {
         quizItem.setOptions(options);
         quizItem.setCorrectAnswer(correctAnswer.toUpperCase());
         quizItemService.save(quizItem);
-        return "redirect:/quizitem/list";
+        return "redirect:/instructor/quizitem/list";
     }
 }

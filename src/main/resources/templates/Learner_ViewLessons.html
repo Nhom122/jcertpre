@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài giảng của khóa học</title>
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 24px;
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+        }
+        p.description {
+            color: #444;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 2rem;
+            color: #333;
+        }
+        .lesson {
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+        .lesson-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 0.25rem;
+        }
+        .resource {
+            margin: 0.25rem 0;
+        }
+        .resource a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .resource a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${course.title}">Tên khóa học</h1>
+    <p class="description" th:text="${course.description}">Mô tả khóa học</p>
+
+    <h2>Danh sách bài giảng</h2>
+
+    <div th:each="lesson : ${lessons}" class="lesson">
+        <div class="lesson-title" th:text="${lesson.title}">Tên bài giảng</div>
+
+        <div class="resource" th:if="${lesson.videoUrl}">
+            Video bài giảng:
+            <a th:href="${lesson.videoUrl}" target="_blank">Xem video</a>
+        </div>
+
+        <div class="resource" th:if="${lesson.slideUrl}">
+            Slide bài giảng:
+            <a th:href="${lesson.slideUrl}" target="_blank">Tải slide</a>
+        </div>
+
+    </div>
+
+    <a class="back-link" href="/jcertpre/learner/dashboard">Quay lại danh sách khóa học</a>
+</div>
+</body>
+</html>

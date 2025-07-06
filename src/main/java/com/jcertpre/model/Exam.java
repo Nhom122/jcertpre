@@ -16,6 +16,10 @@ public class Exam {
 
     private int durationMinutes;
 
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private User instructor;
+
     @ManyToMany
     @JoinTable(
             name = "exam_quizitem",

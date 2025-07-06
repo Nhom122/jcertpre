@@ -18,12 +18,12 @@
   <div th:each="quizItem, iterStat : ${exam.quizItems}">
     <div class="card mb-3">
       <div class="card-body">
-        <h5 th:text="'Câu ' + (${iterStat.index} + 1) + ': ' + quizItem.text"></h5>
+        <h5 th:text="'Câu ' + (${iterStat.index} + 1) + ': ' + ${quizItem.text}"></h5>
 
         <ul>
           <li th:each="opt, idx : ${quizItem.options}"
-              th:text="${T(java.lang.Character).toString(T(Integer).valueOf(65) + idx.index)} + '. ' + opt"
-              th:classappend="${T(java.lang.Character).toString(T(Integer).valueOf(65) + idx.index)} == examResult.submittedAnswers[iterStat.index] ? 'font-weight-bold' : ''">
+              th:text="${optionLabels[idx.index]} + '. ' + ${opt}"
+              th:classappend="${optionLabels[idx.index]} == examResult.submittedAnswers[iterStat.index] ? 'font-weight-bold' : ''">
           </li>
         </ul>
 
@@ -35,18 +35,18 @@
           <strong>Đáp án đúng:</strong>
           <span th:text="${quizItem.correctAnswer}" class="correct"></span>
         </p>
-        <p th:if="${examResult.submittedAnswers[iterStat.index]} == quizItem.correctAnswer">
+        <p th:if="${examResult.submittedAnswers[iterStat.index]?.equals(quizItem.correctAnswer)}">
           <span class="correct">Bạn trả lời đúng ✔️</span>
         </p>
-        <p th:if="${examResult.submittedAnswers[iterStat.index]} != quizItem.correctAnswer">
+        <p th:if="${!examResult.submittedAnswers[iterStat.index]?.equals(quizItem.correctAnswer)}">
           <span class="wrong">Bạn trả lời sai ✘</span>
         </p>
       </div>
     </div>
   </div>
 
-  <a th:href="@{/exam/take/{id}(id=${exam.id})}" class="btn btn-primary">Thi lại</a>
-  <a href="/exam/list" class="btn btn-secondary">Về danh sách đề thi</a>
+  <a th:href="@{/jcertpre/instructor/exam/take/{id}(id=${exam.id})}" class="btn btn-primary">Thi lại</a>
+  <a href="/jcertpre/learner/dashboard" class="btn btn-secondary">Về dashboard</a>
 </div>
 </body>
 </html>

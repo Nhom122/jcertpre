@@ -6,6 +6,7 @@ import com.jcertpre.repositories.IConsultationScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConsultationScheduleService {
@@ -13,6 +14,18 @@ public class ConsultationScheduleService {
 
     public ConsultationScheduleService(IConsultationScheduleRepository repo) {
         this.repo = repo;
+    }
+
+    public ConsultationSchedule findById(Long id) {
+        return repo.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với ID: " + id));
+    }
+
+    public List<ConsultationSchedule> findByStatus(String status) {
+        return repo.findByStatus(status);
+    }
+
+    public List<ConsultationSchedule> findAll() {
+        return repo.findAll();
     }
 
     public ConsultationSchedule create(ConsultationSchedule cs) {
@@ -30,11 +43,4 @@ public class ConsultationScheduleService {
     public List<ConsultationSchedule> getByLearner(User learner) {
         return repo.findByLearner(learner);
     }
-
-    public void approve(Long id) {
-        ConsultationSchedule cs = repo.findById(id).orElseThrow();
-        cs.setStatus("APPROVED");
-        repo.save(cs);
-    }
-
 }

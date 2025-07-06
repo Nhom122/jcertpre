@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/advisor")
+@RequestMapping("/instructor")
 public class AdvisorViewController {
 
     @Autowired
@@ -30,21 +30,21 @@ public class AdvisorViewController {
 
         model.addAttribute("user", currentUser);
         return "Giangvien_Dashboard"; // Tên file HTML
-    }*/
+    }
 
     // Giao diện quản lý khóa học
     @GetMapping("/courses")
     public String showCourseList(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
 
-        if (currentUser == null || currentUser.getRole() != User.Role.ADVISOR) {
+        if (currentUser == null || currentUser.getRole() != User.Role.INSTRUCTOR) {
             return "redirect:/login";
         }
 
         List<Course> courses = instructorService.getCoursesByInstructor(currentUser.getId());
         model.addAttribute("courses", courses);
         return "Giangvien_Quanlikhoahoc"; // Tên file Thymeleaf: instructor_courses.html
-    }
+    }*/
 
     // Giao diện tạo khóa học
     @GetMapping("/courses/create")

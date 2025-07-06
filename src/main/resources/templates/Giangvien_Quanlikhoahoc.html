@@ -8,22 +8,57 @@
 </head>
 <body>
 <div class="container mt-4">
+    <!-- Tiêu đề và nút tạo khóa học -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2>🎓 Khóa học của tôi</h2>
-            <p>Quản lý, chỉnh sửa và theo dõi các khóa học bạn đã tạo</p>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/advisor/dashboard}" class="btn btn-outline-secondary mr-3">Trang chủ</a>
+
+            <div>
+                <h2>🎓 Khóa học của tôi</h2>
+                <p>Quản lý, chỉnh sửa và theo dõi các khóa học bạn đã tạo</p>
+            </div>
         </div>
-        <a th:href="@{/instructor/courses/create}" class="btn btn-success">➕ Tạo khóa học mới</a>
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#createCourseForm">
+            ➕ Tạo khóa học mới
+        </button>
     </div>
 
+    <!-- Thông báo -->
     <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
 
+    <!-- Form tạo khóa học -->
+    <div class="collapse mb-4" id="createCourseForm">
+        <div class="card card-body">
+            <form th:action="@{/courses/create}" method="post">
+                <div class="form-group">
+                    <label for="title">Tiêu đề</label>
+                    <input type="text" name="title" id="title" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="courseType">Loại khóa học</label>
+                    <select name="courseType" id="courseType" class="form-control" required>
+                        <option value="VIDEO">Video</option>
+                        <option value="LIVESTREAM">Livestream</option>
+                        <option value="OFFLINE">Offline</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Tạo khóa học</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Danh sách khóa học -->
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th>Tiêu đề</th>
             <th>Mô tả</th>
+            <th>Loại</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
         </tr>
@@ -33,6 +68,7 @@
             <td th:text="${course.id}">1</td>
             <td th:text="${course.title}">Tiếng Anh B1</td>
             <td th:text="${course.description}">Mô tả khóa học</td>
+            <td th:text="${course.courseType}">VIDEO</td>
             <td>
                 <span th:if="${course.approved}" class="badge badge-success">Đã duyệt</span>
                 <span th:unless="${course.approved}" class="badge badge-warning">Chờ duyệt</span>

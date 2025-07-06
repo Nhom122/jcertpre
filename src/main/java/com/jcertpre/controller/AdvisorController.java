@@ -125,9 +125,9 @@ public class AdvisorController {
             return "login";
         }
 
-        List<ConsultationSchedule> pendingSchedules = scheduleService.getPendingByAdvisor(user);
-        model.addAttribute("pendingConsultations", pendingSchedules.size());
-        model.addAttribute("pendingList", pendingSchedules);
+        List<ConsultationSchedule> Schedules = scheduleService.getByAdvisor(user);
+        model.addAttribute("Consultations", Schedules.size());
+        model.addAttribute("ConsultationsList", Schedules);
         return "CoVanTuvancanhan";
     }
 

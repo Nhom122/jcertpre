@@ -34,9 +34,12 @@ public class UserService {
 
     // Đăng nhập (basic check)
     public User loginUser(String email, String password) {
-        return userRepository.findByEmail(email)
-                .filter(user -> user.getPassword().equals(password))
-                .orElseThrow(() -> new RuntimeException("Email hoặc mật khẩu không đúng."));
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+            return userOpt.get();
+        } else {
+            throw new RuntimeException("Invalid email or password.");
+        }
     }
 
     // Lấy danh sách tất cả người dùng
@@ -72,6 +75,19 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    // Tạo người dùng từ phía Admin
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại.");
+        }
+
+        // ⚠️ Nếu bạn muốn bảo mật hơn, hãy mã hóa mật khẩu ở đây:
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
+    }
+
 
 
 

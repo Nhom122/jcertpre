@@ -1,54 +1,67 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Đăng ký khóa học - JCertPre</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f9fafb; padding: 2rem; }
-    h1 { text-align: center; color: #0c4a6e; margin-bottom: 2rem; }
-    form { max-width: 700px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 1.5rem; }
-    label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
-    select, input[type="text"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    h1, h2 { text-align: center; color: #0c4a6e; margin-bottom: 1rem; }
+    .container { max-width: 900px; margin: auto; }
+    .card {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
     }
-    button {
+    .card p { margin: 0.5rem 0; }
+    .card form { display: inline; }
+    .btn {
       background-color: #0c4a6e;
       color: white;
-      padding: 0.75rem 2rem;
+      padding: 0.5rem 1rem;
       border: none;
       border-radius: 5px;
+      text-decoration: none;
       cursor: pointer;
-      display: block;
-      margin: 1rem auto 0;
-      font-size: 1rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      margin: 2rem 0 1rem;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.5rem;
     }
   </style>
 </head>
 <body>
-<h1>Đăng ký khóa học</h1>
-<form action="/api/courses/register" method="POST">
-  <div class="form-group">
-    <label for="course">Chọn khóa học</label>
-    <select id="course" name="courseId" required>
-      <option value="">-- Chọn khóa học --</option>
-      <option value="JLPTN5">JLPT N5 - Ngữ pháp căn bản</option>
-      <option value="JLPTN3">JLPT N3 - Từ vựng nâng cao</option>
-      <option value="NATREADING">NAT-TEST - Đọc hiểu</option>
-      <option value="JLPTLISTEN">JLPT - Luyện nghe</option>
-    </select>
+<div class="container">
+  <h1>🎓 Đăng ký khóa học</h1>
+
+  <!-- 🔹 Các khóa học có thể đăng ký -->
+  <h2 class="section-title">📌 Khóa học có thể đăng ký</h2>
+  <div th:if="${#lists.isEmpty(availableCourses)}">
+    <p>Không còn khóa học nào để đăng ký.</p>
+  </div>
+  <div th:each="course : ${availableCourses}" class="card">
+    <p><strong>Khóa học:</strong> <span th:text="${course.title}">Tên</span></p>
+    <p><strong>Mô tả:</strong> <span th:text="${course.description}">Mô tả</span></p>
+    <form th:action="@{/courses/learner/register}" method="post">
+      <input type="hidden" name="courseId" th:value="${course.id}" />
+      <button type="submit" class="btn">Đăng ký</button>
+    </form>
   </div>
 
-  <div class="form-group">
-    <label for="note">Ghi chú (tuỳ chọn)</label>
-    <input type="text" id="note" name="note" placeholder="VD: Muốn học theo lịch tối...">
+  <!-- 🔹 Các khóa học đã đăng ký -->
+  <h2 class="section-title">✅ Khóa học đã đăng ký</h2>
+  <div th:if="${#lists.isEmpty(enrolledCourses)}">
+    <p>Bạn chưa đăng ký khóa học nào.</p>
   </div>
-
-  <button type="submit">Đăng ký khóa học</button>
-</form>
+  <div th:each="course : ${enrolledCourses}" class="card">
+    <p><strong>Khóa học:</strong> <span th:text="${course.title}">Tên</span></p>
+    <p><strong>Mô tả:</strong> <span th:text="${course.description}">Mô tả</span></p>
+    <a th:href="@{/courses/{id}(id=${course.id})}" class="btn">Vào học</a>
+  </div>
+</div>
 </body>
 </html>

@@ -8,11 +8,20 @@
 </head>
 <body>
 <div class="container mt-4">
-  <h2 class="mb-4">👤 Quản lý người dùng</h2>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">👤 Quản lý người dùng</h2>
+    <div>
+      <a th:href="@{/admin/dashboard}" class="btn btn-secondary mr-2">⬅️ Quay về Trang Quản Trị</a>
+      <button class="btn btn-success" data-toggle="modal" data-target="#createUserModal">➕ Tạo người dùng</button>
+    </div>
+  </div>
 
   <!-- Hiển thị thông báo nếu có -->
   <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
+  <!-- Bảng người dùng -->
   <table class="table table-bordered table-hover">
     <thead class="thead-dark">
     <tr>
@@ -30,7 +39,7 @@
       <td th:text="${user.email}">a@gmail.com</td>
       <td th:text="${user.role}">LEARNER</td>
       <td>
-        <!-- Nút Cập nhật (mở modal) -->
+        <!-- Nút Cập nhật -->
         <button class="btn btn-sm btn-primary" data-toggle="modal" th:data-target="'#editModal' + ${user.id}">
           ✏️ Sửa
         </button>
@@ -86,6 +95,47 @@
           </div>
         </form>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal tạo người dùng mới -->
+  <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form th:action="@{/admin/users/create}" method="post">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Tạo người dùng mới</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Họ tên</label>
+              <input type="text" name="fullName" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label>Mật khẩu</label>
+              <input type="text" name="password" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label>Vai trò</label>
+              <select name="role" class="form-control" required>
+                <option value="LEARNER">Học viên</option>
+                <option value="INSTRUCTOR">Giảng viên</option>
+                <option value="ADVISOR">Cố vấn</option>
+                <option value="ADMIN">Quản trị</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">💾 Lưu</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 

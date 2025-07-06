@@ -31,4 +31,14 @@ public class QuizItem {
 
     public String getCorrectAnswer() { return correctAnswer; }
     public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
+    
+    public String getCorrectOp(String correctAnswer) { 
+        return switch (correctAnswer){
+            case "A" -> this.options.get(0);
+            case "B" -> this.options.get(1);
+            case "C" -> this.options.get(2);
+            case "D" -> this.options.get(3);
+            default -> throw new IllegalStateException("Unexpected value: " + correctAnswer);
+        };
+    }
 }

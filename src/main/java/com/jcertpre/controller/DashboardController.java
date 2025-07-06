@@ -1,11 +1,8 @@
 package com.jcertpre.controller;
 
-import com.jcertpre.model.ConsultationSchedule;
-import com.jcertpre.model.User;
-import com.jcertpre.services.ConsultationScheduleService;
-import com.jcertpre.services.CourseService;
-import com.jcertpre.services.FeedbackService;
-import com.jcertpre.services.UserService;
+import com.jcertpre.model.*;
+import com.jcertpre.repositories.IAdvisorStudyPlanRepository;
+import com.jcertpre.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,15 @@ public class DashboardController {
     @Autowired
     private FeedbackService feedbackService;
 
+    @Autowired
+    private EnrollmentService enrollmentService;
+
+    @Autowired
+    private IAdvisorStudyPlanRepository studyPlanRepository;
+
+    @Autowired
+    private ExamService examService;
+
     @GetMapping("/learner/dashboard")
     public String learnerDashboard(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
@@ -41,12 +47,21 @@ public class DashboardController {
 
         model.addAttribute("user", user);
 
+        List<Course> registeredCourses = enrollmentService.getCoursesByLearner(user.getId());
+        List<Exam> examSimulations = examService.getAllExams();
+        List<AdvisorStudyPlan> studyPlans = studyPlanRepository.findByLearner(user);
+
+        model.addAttribute("user", user);
+        model.addAttribute("enrolledCourses", registeredCourses);
+        model.addAttribute("examSimulations", examSimulations);
+        model.addAttribute("studyPlans", studyPlans);
+
         return "dashboard";
     }
 
 
     @GetMapping("/admin/dashboard")
-    public String adminDashboard(Model model) {
+    public String adminHome(Model model) {
         long totalUsers = userService.getAllUsers().size();
         long pendingCourses = courseService.countPendingCourses(); // cần triển khai
         long pendingFeedbacks = feedbackService.countPendingFeedbacks(); // cần triển khai
@@ -55,12 +70,12 @@ public class DashboardController {
         model.addAttribute("pendingCourses", pendingCourses);
         model.addAttribute("pendingFeedbacks", pendingFeedbacks);
 
-        return "Admin_trangchu";
+        return "Admin_trangchu"; // Trang tổng quan
     }
 
     @GetMapping("/instructor/dashboard")
     public String instructorDashboard(HttpSession session, Model model) {
-        User currentUser = (User) session.getAttribute("currentUser");
+        User currentUser = (User) session.getAttribute("loggedInUser");
 
         if (currentUser == null || currentUser.getRole() != INSTRUCTOR) {
             return "redirect:/login";

@@ -6,6 +6,7 @@ import com.jcertpre.model.Livestream;
 import com.jcertpre.model.User;
 import com.jcertpre.services.CourseService;
 import com.jcertpre.services.InstructorService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static com.jcertpre.model.User.Role.INSTRUCTOR;
+
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
@@ -33,14 +36,17 @@ public class InstructorController {
 
     // ====================== BÀI GIẢNG ==========================
 
-
-
     @PostMapping("/courses/{courseId}/add-lesson")
     public String addLesson(@PathVariable Long courseId,
                             @ModelAttribute Lesson lesson,
                             @RequestParam(value = "attachments", required = false) MultipartFile[] files,
-                            @SessionAttribute("currentUser") User instructor,
+                            HttpSession session,
                             RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
 
         Course course = courseService.findById(courseId);
         if (course == null || !course.getInstructor().getId().equals(instructor.getId())) {
@@ -73,9 +79,14 @@ public class InstructorController {
 
     @GetMapping("/courses/{courseId}/lessons")
     public String viewLessonsByCourse(@PathVariable Long courseId,
-                                      @SessionAttribute("currentUser") User instructor,
+                                      HttpSession session,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
 
         Course course = courseService.findById(courseId);
         if (course == null || !course.getInstructor().getId().equals(instructor.getId())) {
@@ -90,7 +101,12 @@ public class InstructorController {
     }
 
     @GetMapping("/lessons/all")
-    public String viewAllLessonsGrouped(@SessionAttribute("currentUser") User instructor, Model model) {
+    public String viewAllLessonsGrouped(HttpSession session, Model model) {
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
+
         Map<Course, List<Lesson>> lessonsByCourse = instructorService.getAllLessonsGroupedByCourse(instructor.getId());
         model.addAttribute("lessonsByCourse", lessonsByCourse);
         return "GiangVien_TatCaBaiGiang";
@@ -101,8 +117,13 @@ public class InstructorController {
                                         @RequestParam String title,
                                         @RequestParam(required = false) String videoUrl,
                                         @RequestParam(required = false) String slideUrl,
-                                        @SessionAttribute("currentUser") User instructor,
+                                        HttpSession session,
                                         RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
 
         Lesson lesson = instructorService.findLessonById(id);
         if (lesson == null || !lesson.getCourse().getInstructor().getId().equals(instructor.getId())) {
@@ -121,8 +142,13 @@ public class InstructorController {
 
     @GetMapping("/lessons/delete/{lessonId}")
     public String deleteLesson(@PathVariable Long lessonId,
-                               @SessionAttribute("currentUser") User instructor,
+                               HttpSession session,
                                RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
 
         Lesson lesson = instructorService.findLessonById(lessonId);
         if (lesson == null || !lesson.getCourse().getInstructor().getId().equals(instructor.getId())) {
@@ -138,19 +164,29 @@ public class InstructorController {
 
     // ====================== LIVESTREAM ==========================
 
-    // 👇 Thêm GET để hiện form tạo livestream
     @GetMapping("/livestream/create")
-    public String showCreateLivestreamForm(Model model) {
-        model.addAttribute("livestream", new Livestream()); // tạo object trống cho form
-        return "Giangvien_livestream"; // tên file HTML (đặt trong /templates)
+    public String showCreateLivestreamForm(HttpSession session, Model model) {
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("livestream", new Livestream());
+        return "Giangvien_livestream";
     }
 
     @PostMapping("/livestream/create")
     public String createLivestream(@ModelAttribute Livestream livestream,
                                    @RequestParam("startDate") String startDate,
                                    @RequestParam("startTime") String startTime,
-                                   @SessionAttribute("currentUser") User instructor,
+                                   HttpSession session,
                                    RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
+
         try {
             LocalDateTime scheduledAt = LocalDateTime.parse(startDate + "T" + startTime);
             livestream.setScheduledAt(scheduledAt);
@@ -165,4 +201,54 @@ public class InstructorController {
 
         return "redirect:/instructor/livestream/create";
     }
+
+    // 👉 Hiển thị form chỉnh sửa khóa học
+    @GetMapping("/courses/{id}/edit")
+    public String showEditCourseForm(@PathVariable Long id,
+                                     HttpSession session,
+                                     Model model,
+                                     RedirectAttributes redirectAttributes) {
+        Course course = courseService.findById(id);
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
+
+        // Kiểm tra khóa học tồn tại và thuộc về instructor hiện tại
+        if (course == null || !course.getInstructor().getId().equals(instructor.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Không thể chỉnh sửa khóa học không thuộc quyền sở hữu.");
+            return "redirect:/instructor/courses";
+        }
+
+        model.addAttribute("course", course);
+        return "Giangvien_EditCourse"; // Tên file HTML trong /templates
+    }
+
+    @PostMapping("/courses/update")
+    public String updateCourse(@ModelAttribute Course course,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+
+        User instructor = (User) session.getAttribute("loggedInUser");
+        if (instructor == null || instructor.getRole() != INSTRUCTOR) {
+            return "redirect:/login";
+        }
+
+        Course existing = courseService.findById(course.getId());
+
+        if (existing == null || !existing.getInstructor().getId().equals(instructor.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Không thể cập nhật khóa học.");
+            return "redirect:/instructor/courses";
+        }
+
+        existing.setTitle(course.getTitle());
+        existing.setDescription(course.getDescription());
+        existing.setCourseType(course.getCourseType());
+
+        courseService.save(existing);
+        redirectAttributes.addFlashAttribute("message", "Cập nhật khóa học thành công!");
+        return "redirect:/instructor/courses";
+    }
+
 }

@@ -4,38 +4,80 @@
   <meta charset="UTF-8" />
   <title>Thêm Câu Hỏi Trắc Nghiệm Mới</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f0f4f8;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      margin-top: 3rem;
+    }
+    h2 {
+      color: #0c4a6e;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      font-weight: 600;
+    }
+    .btn-primary {
+      background-color: #0c4a6e;
+      border: none;
+    }
+    .btn-secondary {
+      margin-left: 1rem;
+    }
+  </style>
 </head>
 <body>
-<div class="container mt-4">
-  <h2>➕ Thêm câu hỏi trắc nghiệm mới</h2>
-  <form th:action="@{/quizitem/create}" method="post">
-    <div class="form-group">
-      <label>Nội dung câu hỏi</label>
-      <input type="text" name="text" class="form-control" placeholder="Nhập câu hỏi" required />
-    </div>
-    <div class="form-group">
-      <label>Lựa chọn A</label>
-      <input type="text" name="options[0]" class="form-control" placeholder="Nhập lựa chọn A" required />
-    </div>
-    <div class="form-group">
-      <label>Lựa chọn B</label>
-      <input type="text" name="options[1]" class="form-control" placeholder="Nhập lựa chọn B" required />
-    </div>
-    <div class="form-group">
-      <label>Lựa chọn C</label>
-      <input type="text" name="options[2]" class="form-control" placeholder="Nhập lựa chọn C" required />
-    </div>
-    <div class="form-group">
-      <label>Lựa chọn D</label>
-      <input type="text" name="options[3]" class="form-control" placeholder="Nhập lựa chọn D" required />
-    </div>
-    <div class="form-group">
-      <label>Đáp án đúng (A, B, C hoặc D)</label>
-      <input type="text" name="correctAnswer" class="form-control" placeholder="Ví dụ: A" pattern="[ABCD]" title="Chỉ nhập A, B, C hoặc D" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Lưu câu hỏi</button>
-    <a href="/quizitem/list" class="btn btn-secondary">Quay lại danh sách</a>
-  </form>
+<div class="container">
+  <div class="card">
+    <h2>➕ Thêm câu hỏi trắc nghiệm mới</h2>
+    <form th:action="@{/instructor/quizitem/create}" method="post">
+      <div class="form-group">
+        <label>Nội dung câu hỏi</label>
+        <input type="text" name="text" class="form-control" placeholder="Nhập câu hỏi" required />
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label>Lựa chọn A</label>
+          <input type="text" name="options" class="form-control" placeholder="Nhập lựa chọn A" required />
+        </div>
+        <div class="form-group col-md-6">
+          <label>Lựa chọn B</label>
+          <input type="text" name="options" class="form-control" placeholder="Nhập lựa chọn B" required />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label>Lựa chọn C</label>
+          <input type="text" name="options" class="form-control" placeholder="Nhập lựa chọn C" required />
+        </div>
+        <div class="form-group col-md-6">
+          <label>Lựa chọn D</label>
+          <input type="text" name="options" class="form-control" placeholder="Nhập lựa chọn D" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Đáp án đúng (A, B, C hoặc D)</label>
+        <select name="correctAnswer" class="form-control" required>
+          <option value="" disabled selected>Chọn đáp án đúng</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">💾 Lưu câu hỏi</button>
+      <a href="/jcertpre/instructor/quizitem/list" class="btn btn-secondary">↩️ Quay lại danh sách</a>
+    </form>
+  </div>
 </div>
 </body>
 </html>

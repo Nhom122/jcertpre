@@ -17,11 +17,12 @@
       <th>Học viên</th>
       <th>Thời gian mong muốn</th>
       <th>Nội dung yêu cầu</th>
-      <th>Ngày gửi</th>
+      <th>Ngày tư vấn</th>
+      <th>Trạng thái</th> <!-- Thêm cột trạng thái -->
     </tr>
     </thead>
     <tbody>
-    <tr th:each="schedule, iterStat : ${pendingList}">
+    <tr th:each="schedule, iterStat : ${ConsultationsList}">
       <td th:text="${iterStat.index + 1}">1</td>
       <td th:text="${schedule.learner.fullName}">Nguyễn Văn A</td>
       <td>
@@ -30,11 +31,19 @@
       </td>
       <td th:text="${schedule.topic}">Xin tư vấn về kế hoạch học từ vựng hiệu quả...</td>
       <td th:text="${#temporals.format(schedule.startTime, 'dd/MM/yyyy')}">01/07/2025</td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(consultationRequests)}">
-      <td colspan="5" class="text-center text-muted">Không có yêu cầu tư vấn nào.</td>
+      <td>
+  <span th:switch="${schedule.status}">
+    <span th:case="'PENDING'" class="badge badge-warning">Chưa duyệt</span>
+    <span th:case="'APPROVED'" class="badge badge-success">Đã duyệt</span>
+    <span th:case="'REJECTED'" class="badge badge-danger">Đã từ chối</span>
+    <span th:case="*">⚠️ Không xác định</span>
+  </span>
+      </td>
     </tr>
 
+    <tr th:if="${#lists.isEmpty(ConsultationsList)}">
+      <td colspan="6" class="text-center text-muted">Không có yêu cầu tư vấn nào.</td>
+    </tr>
     </tbody>
   </table>
 </div>

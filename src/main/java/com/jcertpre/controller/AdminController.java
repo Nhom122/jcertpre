@@ -24,26 +24,24 @@ public class AdminController {
     @Autowired
     private FeedbackService feedbackService;
 
-    /*// ✅ Trang dashboard quản trị
-    @GetMapping("/dashboard")
-    public String adminHome(Model model) {
-        long totalUsers = userService.getAllUsers().size();
-        long pendingCourses = courseService.countPendingCourses(); // cần triển khai
-        long pendingFeedbacks = feedbackService.countPendingFeedbacks(); // cần triển khai
-
-        model.addAttribute("totalUsers", totalUsers);
-        model.addAttribute("pendingCourses", pendingCourses);
-        model.addAttribute("pendingFeedbacks", pendingFeedbacks);
-
-        return "Admin_trangchu"; // Trang tổng quan
-    }*/
-
     // ✅ Trang quản lý người dùng
     @GetMapping("/users")
     public String showUserManagementPage(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "Admin_quanli"; // Trang quản lý người dùng
+    }
+
+    // ✅ Tạo người dùng mới (từ admin)
+    @PostMapping("/users/create")
+    public String createUser(@ModelAttribute User user, Model model) {
+        try {
+            userService.createUser(user); // Cần có trong UserService
+            model.addAttribute("message", "Tạo người dùng thành công!");
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/users";
     }
 
     // ✅ Cập nhật người dùng
