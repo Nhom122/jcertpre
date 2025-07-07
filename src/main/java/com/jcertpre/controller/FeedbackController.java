@@ -19,7 +19,7 @@ public class FeedbackController {
     // Trang hiển thị danh sách phản hồi chưa xử lý
     @GetMapping("/pending")
     public String showPendingFeedbacks(Model model) {
-        List<Feedback> feedbacks = feedbackService.getAllPendingFeedback();
+        List<Feedback> feedbacks = feedbackService.getAllByStatus();
         model.addAttribute("feedbacks", feedbacks);
         return "Admin_phanhoihocvien";
     }
