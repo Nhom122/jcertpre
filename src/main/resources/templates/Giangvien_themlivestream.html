@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo Lịch Livestream</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="header">
+        <h1>📡 Tạo Lịch Livestream</h1>
+        <p>Tạo buổi livestream mới cho học viên của bạn</p>
+    </div>
+
+    <div class="form-container">
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <form th:action="@{/instructor/livestream/create}" th:object="${livestream}" method="post">
+            <div class="form-group">
+                <label>Tiêu đề livestream <span class="text-danger">*</span></label>
+                <input type="text" th:field="*{title}" class="form-control" placeholder="Nhập tiêu đề buổi livestream" required />
+            </div>
+
+            <div class="form-group">
+                <label>Mô tả</label>
+                <textarea th:field="*{description}" class="form-control" placeholder="Mô tả nội dung buổi livestream..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Link buổi học <span class="text-danger">*</span></label>
+                <input type="url" th:field="*{meetingLink}" class="form-control" placeholder="https://zoom.us/j/... hoặc https://meet.google.com/..." required />
+            </div>
+
+            <div class="form-group">
+                <label>Thời gian bắt đầu <span class="text-danger">*</span></label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="date" name="startDate" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <input type="time" name="startTime" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ❌ Loại bỏ các trường không tồn tại trong model -->
+            <!-- <div class="form-group">...</div> -->
+
+            <button type="submit" class="btn btn-success">🚀 Tạo Livestream</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

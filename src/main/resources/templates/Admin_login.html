@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1565c0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .login-btn:hover {
+            background: #0d47a1;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .logo svg {
+            width: 50px;
+            height: 50px;
+        }
+        .error-message {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="logo">
+        <svg viewBox="0 0 24 24" fill="#1565c0" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22
+                C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM12 20
+                C7.582 20 4 16.418 4 12C4 7.582 7.582 4 12 4
+                C16.418 4 20 7.582 20 12C20 16.418 16.418 20 12 20ZM12 6
+                C8.686 6 6 8.686 6 12C6 15.314 8.686 18 12 18
+                C15.314 18 18 15.314 18 12C18 8.686 15.314 6 12 6ZM12 16
+                C9.791 16 8 14.209 8 12C8 9.791 9.791 8 12 8
+                C14.209 8 16 9.791 16 12C16 14.209 14.209 16 12 16Z"/>
+            <path d="M12 10C10.895 10 10 10.895 10 12C10 13.105 10.895 14 12 14
+                C13.105 14 14 13.105 14 12C14 10.895 13.105 10 12 10Z"/>
+        </svg>
+    </div>
+
+    <h1 class="login-title">Admin Login</h1>
+
+    <form th:action="@{/api/login/admin}" method="post" class="login-form">
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="Enter admin email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="error-message" th:if="${error}" th:text="${error}"></div>
+    </form>
+</div>
+</body>
+</html>

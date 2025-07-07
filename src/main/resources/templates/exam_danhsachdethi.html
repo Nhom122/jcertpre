@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý đề thi</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container mt-4">
+  <h2>📝 Quản lý đề thi</h2>
+  <a href="/jcertpre/instructor/exam/create" class="btn btn-primary mb-3">➕ Tạo đề thi mới</a>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Tiêu đề</th>
+      <th>Mô tả</th>
+      <th>Thời gian (phút)</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="exam : ${exams}">
+      <td th:text="${exam.title}"></td>
+      <td th:text="${exam.description}"></td>
+      <td th:text="${exam.durationMinutes}"></td>
+      <td>
+        <a th:href="@{'/instructor/exam/edit/' + ${exam.id}}" class="btn btn-warning btn-sm">Sửa</a>
+        <a th:href="@{'/instructor/exam/delete/' + ${exam.id}}"
+           onclick="return confirm('Bạn có chắc muốn xóa đề thi này?');"
+           class="btn btn-danger btn-sm">Xóa</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

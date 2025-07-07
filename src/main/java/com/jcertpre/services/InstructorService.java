@@ -1,12 +1,16 @@
 package com.jcertpre.services;
 
 import com.jcertpre.model.*;
-import com.jcertpre.repositories.*;
+import com.jcertpre.repositories.ICourseRepository;
+import com.jcertpre.repositories.IFeedbackRepository;
+import com.jcertpre.repositories.ILessonRepository;
+import com.jcertpre.repositories.ILivestreamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class InstructorService {
@@ -23,23 +27,22 @@ public class InstructorService {
     @Autowired
     private IFeedbackRepository feedbackRepository;
 
-    // ----- Tạo khóa học
+    // ========== COURSE ==========
+
     public Course createCourse(Course course, User instructor) {
         course.setInstructor(instructor);
-        course.setApproved(false); // chờ admin duyệt
+        course.setApproved(false);
         return courseRepository.save(course);
     }
 
-    // ----- Cập nhật khóa học (tương tự, nếu cần)
-
-    // ----- Lấy danh sách khóa học của giảng viên
     public List<Course> getCoursesByInstructor(Long instructorId) {
         return courseRepository.findAll().stream()
                 .filter(c -> c.getInstructor().getId().equals(instructorId))
                 .toList();
     }
 
-    // ----- Thêm bài giảng vào khóa học
+    // ========== LESSON ==========
+
     public Lesson addLessonToCourse(Long courseId, Lesson lesson, Long instructorId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
@@ -52,28 +55,57 @@ public class InstructorService {
         return lessonRepository.save(lesson);
     }
 
-    // ----- Lấy bài giảng của khóa học
     public List<Lesson> getLessonsByCourse(Long courseId) {
         return lessonRepository.findByCourseId(courseId);
     }
 
-    // ----- Tạo lịch livestream
+    public List<Lesson> getLessonsByInstructor(Long instructorId) {
+        return lessonRepository.findLessonsByInstructorId(instructorId);
+    }
+
+    public List<Lesson> getAllLessonsByInstructor(Long instructorId) {
+        return lessonRepository.findByCourseInstructorId(instructorId);
+    }
+
+    public Map<Course, List<Lesson>> getAllLessonsGroupedByCourse(Long instructorId) {
+        List<Course> courses = getCoursesByInstructor(instructorId);
+        Map<Course, List<Lesson>> map = new LinkedHashMap<>();
+        for (Course course : courses) {
+            List<Lesson> lessons = getLessonsByCourse(course.getId());
+            map.put(course, lessons);
+        }
+        return map;
+    }
+
+    public Lesson findLessonById(Long id) {
+        return lessonRepository.findById(id).orElse(null);
+    }
+
+    public Lesson saveLesson(Lesson lesson) {
+        return lessonRepository.save(lesson);
+    }
+
+    public void deleteLessonById(Long id) {
+        lessonRepository.deleteById(id);
+    }
+
+    // ========== LIVESTREAM ==========
+
     public Livestream scheduleLivestream(Livestream livestream, User instructor) {
         livestream.setInstructor(instructor);
         return livestreamRepository.save(livestream);
     }
 
-    // ----- Lấy lịch livestream của giảng viên
     public List<Livestream> getLivestreamsByInstructor(Long instructorId) {
         return livestreamRepository.findByInstructorId(instructorId);
     }
 
-    // ----- Lấy câu hỏi (feedback) từ học viên chờ giảng viên trả lời
+    // ========== FEEDBACK ==========
+
     public List<Feedback> getPendingFeedback() {
         return feedbackRepository.findByStatus(Feedback.Status.PENDING);
     }
 
-    // ----- Giảng viên trả lời câu hỏi
     public Feedback respondToFeedback(Long feedbackId, String response) {
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new RuntimeException("Feedback not found"));

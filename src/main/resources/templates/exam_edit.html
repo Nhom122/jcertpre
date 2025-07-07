@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chỉnh sửa đề thi</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .checkbox-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>✏️ Chỉnh sửa đề thi</h2>
+    <form th:action="@{/instructor/exam/edit/{id}(id=${exam.id})}" method="post">
+    <input type="hidden" name="id" th:value="${exam.id}" />
+
+        <div class="form-group">
+            <label>Tiêu đề đề thi</label>
+            <input type="text" name="title" class="form-control" th:value="${exam.title}" required />
+        </div>
+
+        <div class="form-group">
+            <label>Mô tả</label>
+            <textarea name="description" class="form-control" th:text="${exam.description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Thời gian làm bài (phút)</label>
+            <input type="number" name="durationMinutes" class="form-control" th:value="${exam.durationMinutes}" min="1" required />
+        </div>
+
+        <div class="form-group">
+            <label>Chọn câu hỏi (ít nhất 1)</label>
+            <div class="checkbox-list">
+                <div th:each="q : ${quizItems}">
+                    <input type="checkbox"
+                           th:id="'quizItem' + ${q.id}"
+                           th:name="quizItemIds"
+                           th:value="${q.id}"
+                           th:checked="${#lists.contains(exam.quizItems, q)}" />
+                    <label th:for="'quizItem' + ${q.id}">
+                        <b th:text="${q.text}"></b>
+                        (<span th:text="${'Đáp án đúng: ' + q.correctAnswer + '. ' + q.getCorrectOp(q.correctAnswer)}">Đáp án đúng: A</span>)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Lưu thay đổi</button>
+        <a href="/jcertpre/instructor/exam/list" class="btn btn-secondary">Quay lại danh sách</a>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function (e) {
+            const checked = form.querySelectorAll("input[name='quizItemIds']:checked");
+            if (checked.length === 0) {
+                alert("Vui lòng chọn ít nhất 1 câu hỏi!");
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Yêu Cầu Tư Vấn Từ Học Viên</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-4">📬 Yêu Cầu Tư Vấn Từ Học Viên</h2>
+  <p>Danh sách các yêu cầu tư vấn từ học viên gửi đến bạn.</p>
+
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Học viên</th>
+      <th>Thời gian mong muốn</th>
+      <th>Nội dung yêu cầu</th>
+      <th>Ngày tư vấn</th>
+      <th>Trạng thái</th> <!-- Thêm cột trạng thái -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="schedule, iterStat : ${ConsultationsList}">
+      <td th:text="${iterStat.index + 1}">1</td>
+      <td th:text="${schedule.learner.fullName}">Nguyễn Văn A</td>
+      <td>
+        <span th:text="${#temporals.format(schedule.startTime, 'HH:mm')}">08:00</span> -
+        <span th:text="${#temporals.format(schedule.endTime, 'HH:mm')}">09:00</span>
+      </td>
+      <td th:text="${schedule.topic}">Xin tư vấn về kế hoạch học từ vựng hiệu quả...</td>
+      <td th:text="${#temporals.format(schedule.startTime, 'dd/MM/yyyy')}">01/07/2025</td>
+      <td>
+  <span th:switch="${schedule.status}">
+    <span th:case="'PENDING'" class="badge badge-warning">Chưa duyệt</span>
+    <span th:case="'APPROVED'" class="badge badge-success">Đã duyệt</span>
+    <span th:case="'REJECTED'" class="badge badge-danger">Đã từ chối</span>
+    <span th:case="*">⚠️ Không xác định</span>
+  </span>
+      </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(ConsultationsList)}">
+      <td colspan="6" class="text-center text-muted">Không có yêu cầu tư vấn nào.</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

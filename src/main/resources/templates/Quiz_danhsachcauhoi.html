@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Danh sách câu hỏi trắc nghiệm</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container mt-4">
+  <h2>📋 Danh sách câu hỏi trắc nghiệm</h2>
+  <a href="/jcertpre/instructor/quizitem/create" class="btn btn-success mb-3">➕ Thêm câu hỏi mới</a>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nội dung câu hỏi</th>
+      <th>Lựa chọn</th>
+      <th>Đáp án đúng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="q : ${quizItems}">
+      <td th:text="${q.id}"></td>
+      <td th:text="${q.text}"></td>
+      <td>
+        <ul>
+          <li th:each="opt,iterStat : ${q.options}">
+            <b th:text="${#strings.substring('ABCD', iterStat.index, iterStat.index + 1) + '.'}"></b>
+            <span th:text="${opt}"></span>
+          </li>
+        </ul>
+      </td>
+      <td th:text="${q.correctAnswer}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <a href="/jcertpre/instructor/dashboard" class="btn btn-secondary">Quay lại</a>
+</div>
+</body>
+</html>

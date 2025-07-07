@@ -24,7 +24,7 @@ public class UserService {
     }
 
     // Đăng ký tài khoản Learner mới
-    public User registerUser(String email, String password, String fullName, User.Role role) {
+    public User registerUser(String email, String password, String fullName, Role role) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use.");
         }
@@ -48,7 +48,7 @@ public class UserService {
     }
 
     // Lấy danh sách người dùng theo vai trò
-    public List<User> getUsersByRole(User.Role role) {
+    public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
     }
 
@@ -75,6 +75,19 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    // Tạo người dùng từ phía Admin
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email đã tồn tại.");
+        }
+
+        // ⚠️ Nếu bạn muốn bảo mật hơn, hãy mã hóa mật khẩu ở đây:
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
+    }
+
 
 
 

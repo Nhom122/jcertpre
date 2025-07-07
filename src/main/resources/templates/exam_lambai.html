@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="'Thi: ' + ${exam.title}">Tiêu đề</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container mt-4">
+  <h2>📝 Làm bài thi: <span th:text="${exam.title}"></span></h2>
+  <p th:text="${exam.description}"></p>
+
+  <div id="timer" class="alert alert-info font-weight-bold"></div>
+
+  <form th:action="@{/instructor/exam/submit}" method="post" id="examForm" th:with="choices=${choices}">
+    <input type="hidden" name="examId" th:value="${exam.id}" />
+
+    <div th:each="QItem, iterStat : ${exam.quizItems}">
+      <div class="form-group">
+        <label th:text="'Câu ' + (${iterStat.index} + 1) + ': ' + ${QItem.text}"></label>
+        <div th:each="opt, idx : ${QItem.options}">
+          <input type="radio"
+                 th:id="'q' + ${iterStat.index} + '_opt' + ${idx.index}"
+                 th:name="'answers[' + ${iterStat.index} + ']'"
+                 th:value="${choices[idx.index]}"
+                 required />
+          <label th:for="'q' + ${iterStat.index} + '_opt' + ${idx.index}"
+                 th:text="${choices[idx.index]} + '. ' + ${opt}"></label>
+
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Nộp bài</button>
+  </form>
+
+</div>
+
+<script th:inline="javascript">
+  let durationSeconds = [[${exam.durationMinutes}]] * 60;
+  let timerInterval;
+
+  function startTimer() {
+    const timerEl = document.getElementById('timer');
+    timerInterval = setInterval(() => {
+      if (durationSeconds <= 0) {
+        clearInterval(timerInterval);
+        alert('Hết giờ! Bài thi sẽ được tự động nộp.');
+        document.getElementById('examForm').submit();
+        return;
+      }
+      let minutes = Math.floor(durationSeconds / 60);
+      let seconds = durationSeconds % 60;
+      timerEl.textContent = `Thời gian còn lại: ${minutes} phút ${seconds} giây`;
+      durationSeconds--;
+    }, 1000);
+  }
+
+  window.onload = startTimer;
+</script>
+</body>
+</html>

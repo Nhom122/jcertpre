@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Quản Trị</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2 class="mb-3">🛠️ Trang Quản Trị Hệ Thống</h2>
+    <p>Chào mừng bạn, Admin! Dưới đây là tổng quan hệ thống và các chức năng quản lý.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">👥 Tổng số người dùng</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${totalUsers}">0</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">📚 Khóa học chờ duyệt</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${pendingCourses}">0</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">📩 Phản ánh từ học viên</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${pendingFeedbacks}">0</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h4 class="mt-4">🔧 Các chức năng quản trị</h4>
+    <div class="list-group">
+        <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">👤 Quản lý người dùng</a>
+        <a th:href="@{/admin/courses/pending}" class="list-group-item list-group-item-action">📘 Duyệt khóa học</a>
+        <a th:href="@{/admin/consultations}" class="list-group-item list-group-item-action">🗓️ Duyệt lịch tư vấn</a>
+        <a th:href="@{/admin/feedback/pending}" class="list-group-item list-group-item-action">📬 Phản ánh từ học viên</a>
+
+    </div>
+</div>
+
+<!-- Optional JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

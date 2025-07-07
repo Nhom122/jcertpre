@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Xem lại bài thi: <span th:text="${exam.title}"></span></title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .correct { color: green; font-weight: bold; }
+    .wrong { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h2>🔍 Xem lại bài thi: <span th:text="${exam.title}"></span></h2>
+  <p><strong>Mô tả:</strong> <span th:text="${exam.description}"></span></p>
+  <p><strong>Điểm đạt được:</strong> <span th:text="${examResult.score}"></span> / 10</p>
+
+  <div th:each="quizItem, iterStat : ${exam.quizItems}">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 th:text="'Câu ' + (${iterStat.index} + 1) + ': ' + ${quizItem.text}"></h5>
+
+        <ul>
+          <li th:each="opt, idx : ${quizItem.options}"
+              th:text="${optionLabels[idx.index]} + '. ' + ${opt}"
+              th:classappend="${optionLabels[idx.index]} == examResult.submittedAnswers[iterStat.index] ? 'font-weight-bold' : ''">
+          </li>
+        </ul>
+
+        <p>
+          <strong>Đáp án học viên:</strong>
+          <span th:text="${examResult.submittedAnswers[iterStat.index]}"></span>
+        </p>
+        <p>
+          <strong>Đáp án đúng:</strong>
+          <span th:text="${quizItem.correctAnswer}" class="correct"></span>
+        </p>
+        <p th:if="${examResult.submittedAnswers[iterStat.index]?.equals(quizItem.correctAnswer)}">
+          <span class="correct">Bạn trả lời đúng ✔️</span>
+        </p>
+        <p th:if="${!examResult.submittedAnswers[iterStat.index]?.equals(quizItem.correctAnswer)}">
+          <span class="wrong">Bạn trả lời sai ✘</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <a th:href="@{/instructor/exam/take/{id}(id=${exam.id})}" class="btn btn-primary">Thi lại</a>
+  <a href="/jcertpre/learner/dashboard" class="btn btn-secondary">Về dashboard</a>
+</div>
+</body>
+</html>

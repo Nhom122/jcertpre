@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang Cố Vấn</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-3">🎓 Trang Cố Vấn Học</h2>
+  <p>Chào mừng bạn Cố Vấn! Dưới đây là các chức năng hỗ trợ học viên mà bạn có thể thao tác.</p>
+
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-info mb-3">
+        <div class="card-header">📅 Lịch tư vấn chờ duyệt (A2)</div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${pendingConsultations}">0</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-header">📝 Kế hoạch học tập đã đề xuất (A4)</div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${totalStudyPlans}">0</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-header">📈 Buổi tư vấn đã thực hiện (A3, A6)</div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${completedConsultations}">0</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h4 class="mt-4">🧩 Chức năng tư vấn học viên</h4>
+  <div class="list-group">
+    <a href="/jcertpre/advisor/dashboard/schedule" class="list-group-item list-group-item-action">
+      📅  Tạo lịch tư vấn (Chờ admin phê duyệt)
+    </a>
+    <a href="/jcertpre/advisor/dashboard/detail" class="list-group-item list-group-item-action">
+      🗣️  Yêu Cầu Tư Vấn Từ Học Viên
+    </a>
+    <a href="/jcertpre/advisor/dashboard/liststudyplan" class="list-group-item list-group-item-action">
+      📝  Đề xuất kế hoạch học tập (tạo StudyPlan)
+    </a>
+    <a href="/jcertpre/advisor/dashboard/progress" class="list-group-item list-group-item-action">
+      📊  Theo dõi tiến độ học viên (kết quả thi / học)
+    </a>
+  </div>
+</div>
+
+<!-- Optional JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

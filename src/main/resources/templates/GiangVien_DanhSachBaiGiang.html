@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh Sách Bài Giảng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-3">📘 Danh sách bài giảng của khóa học:</h2>
+  <h4 class="text-primary mb-4" th:text="${courseTitle}">[Tên Khóa Học]</h4>
+
+  <!-- Nút thêm bài giảng -->
+  <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addLessonModal">➕ Thêm bài giảng mới</button>
+
+  <!-- Modal thêm bài giảng -->
+  <div class="modal fade" id="addLessonModal" tabindex="-1" role="dialog" aria-labelledby="addLessonLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form th:action="@{/instructor/courses/{courseId}/add-lesson(courseId=${courseId})}" method="post" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h5 class="modal-title">➕ Thêm Bài Giảng</h5>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Tiêu đề</label>
+              <input type="text" class="form-control" name="title" required>
+            </div>
+            <div class="form-group">
+              <label>Video URL</label>
+              <input type="url" class="form-control" name="videoUrl">
+            </div>
+            <div class="form-group">
+              <label>Slide URL</label>
+              <input type="url" class="form-control" name="slideUrl">
+            </div>
+            <!--<div class="form-group">
+              <label>File đính kèm (tùy chọn)</label>
+              <input type="file" class="form-control-file" name="attachments">
+            </div>-->
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">💾 Lưu</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">❌ Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal sửa bài giảng -->
+  <div class="modal fade" id="editLessonModal" tabindex="-1" role="dialog" aria-labelledby="editLessonLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form th:action="@{/instructor/lessons/update}" method="post">
+          <input type="hidden" name="id" id="editLessonId">
+          <div class="modal-header">
+            <h5 class="modal-title">✏️ Chỉnh sửa Bài Giảng</h5>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Tiêu đề</label>
+              <input type="text" class="form-control" name="title" id="editLessonTitle" required>
+            </div>
+            <div class="form-group">
+              <label>Video URL</label>
+              <input type="url" class="form-control" name="videoUrl" id="editLessonVideoUrl">
+            </div>
+            <div class="form-group">
+              <label>Slide URL</label>
+              <input type="url" class="form-control" name="slideUrl" id="editLessonSlideUrl">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">❌ Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nếu không có bài giảng -->
+  <div th:if="${#lists.isEmpty(lessons)}" class="alert alert-info">
+    ⚠️ Hiện tại chưa có bài giảng nào cho khóa học này.
+  </div>
+
+  <!-- Danh sách bài giảng -->
+  <table class="table table-bordered" th:if="${!#lists.isEmpty(lessons)}">
+    <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Tiêu đề bài giảng</th>
+      <th>Video</th>
+      <th>Slide</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lesson, stat : ${lessons}">
+      <td th:text="${stat.count}">1</td>
+      <td th:text="${lesson.title}">Tiêu đề</td>
+      <td>
+        <a th:if="${lesson.videoUrl != null}" th:href="${lesson.videoUrl}" target="_blank">Xem Video</a>
+        <span th:if="${lesson.videoUrl == null}">Không có</span>
+      </td>
+      <td>
+        <a th:if="${lesson.slideUrl != null}" th:href="${lesson.slideUrl}" target="_blank">Xem Slide</a>
+        <span th:if="${lesson.slideUrl == null}">Không có</span>
+      </td>
+      <td>
+        <a href="javascript:void(0)" class="btn btn-sm btn-warning"
+           data-toggle="modal" data-target="#editLessonModal"
+           th:attr="data-id=${lesson.id},
+                    data-title=${lesson.title},
+                    data-video=${lesson.videoUrl},
+                    data-slide=${lesson.slideUrl}"
+           onclick="fillEditModal(this)">✏️ Sửa</a>
+        <a th:href="@{/instructor/lessons/delete/{id}(id=${lesson.id})}" class="btn btn-sm btn-danger"
+           onclick="return confirm('Bạn có chắc muốn xóa bài giảng này không?');">🗑️ Xóa</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <a th:href="@{/instructor/courses}" class="btn btn-secondary">← Quay lại danh sách khóa học</a>
+</div>
+
+<!-- JS điền dữ liệu vào modal sửa -->
+<script>
+  function fillEditModal(button) {
+    document.getElementById('editLessonId').value = button.getAttribute('data-id');
+    document.getElementById('editLessonTitle').value = button.getAttribute('data-title');
+    document.getElementById('editLessonVideoUrl').value = button.getAttribute('data-video') || '';
+    document.getElementById('editLessonSlideUrl').value = button.getAttribute('data-slide') || '';
+  }
+</script>
+
+</body>
+</html>
