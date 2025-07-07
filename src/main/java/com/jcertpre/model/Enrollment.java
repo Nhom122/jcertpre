@@ -12,7 +12,9 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "learner_id", nullable = true)
     private User learner;
+
 
     @ManyToOne
     private Course course;

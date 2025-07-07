@@ -32,7 +32,7 @@
 
         <div class="col-md-4">
             <div class="card text-white bg-danger mb-3">
-                <div class="card-header">📩 Phản hồi chưa xử lý</div>
+                <div class="card-header">📩 Phản ánh từ học viên</div>
                 <div class="card-body">
                     <h5 class="card-title" th:text="${pendingFeedbacks}">0</h5>
                 </div>
@@ -47,8 +47,7 @@
         <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">👤 Quản lý người dùng</a>
         <a th:href="@{/admin/courses/pending}" class="list-group-item list-group-item-action">📘 Duyệt khóa học</a>
         <a th:href="@{/admin/consultations}" class="list-group-item list-group-item-action">🗓️ Duyệt lịch tư vấn</a>
-        <a th:href="@{/admin/feedback/pending}" class="list-group-item list-group-item-action">📬 Xử lý phản hồi học viên</a>
-        <a th:href="@{/admin/reports}" class="list-group-item list-group-item-action">📈 Báo cáo tổng hợp</a>
+        <a th:href="@{/admin/feedback/pending}" class="list-group-item list-group-item-action">📬 Phản ánh từ học viên</a>
 
     </div>
 </div>

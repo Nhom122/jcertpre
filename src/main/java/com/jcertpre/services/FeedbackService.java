@@ -72,4 +72,9 @@ public class FeedbackService {
     public long countPendingFeedbacks() {
         return feedbackRepository.countByStatus(Status.PENDING);
     }
+
+    public List<Feedback> getAllByStatus() {
+        return feedbackRepository.findByStatusOrderBySubmittedAtDesc(Feedback.Status.PENDING);
+    }
+
 }

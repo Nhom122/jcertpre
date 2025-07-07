@@ -11,22 +11,16 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>#</th>
       <th>Học viên</th>
       <th>Nội dung</th>
       <th>Ngày gửi</th>
-      <th>Hành động</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="fb, i : ${feedbacks}">
-      <td th:text="${i.count}"></td>
       <td th:text="${fb.learner.fullName}"></td>
       <td th:text="${fb.message}"></td>
       <td th:text="${#temporals.format(fb.submittedAt, 'dd/MM/yyyy')}"></td>
-      <td>
-        <a th:href="@{/admin/feedback/respond/{id}(id=${fb.id})}" class="btn btn-primary btn-sm">✍️ Trả lời</a>
-      </td>
     </tr>
     </tbody>
   </table>

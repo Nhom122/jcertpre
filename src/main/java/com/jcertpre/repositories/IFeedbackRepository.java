@@ -14,4 +14,7 @@ public interface IFeedbackRepository extends JpaRepository<Feedback, Long> {
 
     // ✅ Thêm dòng này để đếm theo status
     long countByStatus(Status status);
+
+    List<Feedback> findByStatusOrderBySubmittedAtDesc(Feedback.Status status);
+
 }

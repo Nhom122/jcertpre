@@ -2,6 +2,7 @@ package com.jcertpre.services;
 
 import com.jcertpre.model.User;
 import com.jcertpre.model.User.Role;
+import com.jcertpre.repositories.IEnrollmentRepository;
 import com.jcertpre.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private IEnrollmentRepository enrollmentRepository;
 
     // Đăng ký tài khoản Learner mới
     public User registerLearner(String email, String password, String fullName) {
@@ -73,6 +77,9 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("Người dùng không tồn tại với ID: " + id);
         }
+        enrollmentRepository.detachLearnerByUserId(id);
+
+
         userRepository.deleteById(id);
     }
 
