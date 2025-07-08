@@ -6,12 +6,14 @@ import com.jcertpre.model.User.Role;
 import com.jcertpre.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
+
     @Autowired
     private IUserRepository userRepository;
 
@@ -27,6 +29,12 @@ public class UserService {
     @Autowired
     private ICourseRepository courseRepository;
 
+    @Autowired
+    private IFeedbackRepository feedbackRepository;
+
+    @Autowired
+    private ILessonRepository lessonRepository;
+
     // Đăng ký tài khoản Learner mới
     public User registerLearner(String email, String password, String fullName) {
         if (userRepository.existsByEmail(email)) {
@@ -36,7 +44,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    // Đăng ký tài khoản Learner mới
+    // Đăng ký tài khoản với role tùy chọn
     public User registerUser(String email, String password, String fullName, Role role) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use.");
@@ -81,15 +89,35 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    // Xóa người dùng theo ID
+    // ✅ Xóa người dùng theo ID (tùy theo role)
+    @Transactional
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        advisorStudyPlanRepository.deleteByUserId(id);
-        enrollmentRepository.detachLearnerByUserId(id);
-        consultationScheduleRepository.deleteByUserId(id);
-        List<Course> courses = courseRepository.findByInstructor(user);
-        courseRepository.deleteAll(courses);
+
+        if (user.getRole() == Role.INSTRUCTOR) {
+            // Lấy tất cả khóa học do giảng viên tạo
+            List<Course> courses = courseRepository.findByInstructor(user);
+
+            for (Course course : courses) {
+                // Xóa bài giảng của khóa học
+                lessonRepository.deleteByCourseId(course.getId());
+
+                // Gỡ học viên khỏi khóa học
+                enrollmentRepository.deleteByCourseId(course.getId());
+            }
+
+            // Xóa toàn bộ khóa học
+            courseRepository.deleteAll(courses);
+
+        } else if (user.getRole() == Role.LEARNER) {
+            advisorStudyPlanRepository.deleteByUserId(id);
+            consultationScheduleRepository.deleteByUserId(id);
+            enrollmentRepository.detachLearnerByUserId(id);
+            feedbackRepository.deleteByLearnerId(id);
+        }
+
+        // Cuối cùng: xóa người dùng
         userRepository.deleteById(id);
     }
 
@@ -99,13 +127,7 @@ public class UserService {
             throw new RuntimeException("Email đã tồn tại.");
         }
 
-        // ⚠️ Nếu bạn muốn bảo mật hơn, hãy mã hóa mật khẩu ở đây:
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        // ⚠️ Có thể mã hóa mật khẩu tại đây nếu cần
         return userRepository.save(user);
     }
-
-
-
-
 }

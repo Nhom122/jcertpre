@@ -16,7 +16,6 @@ public interface IAdvisorStudyPlanRepository extends JpaRepository<AdvisorStudyP
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM ConsultationSchedule c WHERE c.learner.id = :userId OR c.advisor.id = :userId")
+    @Query("DELETE FROM AdvisorStudyPlan a WHERE a.learner.id = :userId OR a.advisor.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);
-
 }
