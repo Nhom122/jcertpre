@@ -22,8 +22,7 @@
           <input type="radio"
                  th:id="'q' + ${iterStat.index} + '_opt' + ${idx.index}"
                  th:name="'answers[' + ${iterStat.index} + ']'"
-                 th:value="${choices[idx.index]}"
-                 required />
+                 th:value="${choices[idx.index]}"/>
           <label th:for="'q' + ${iterStat.index} + '_opt' + ${idx.index}"
                  th:text="${choices[idx.index]} + '. ' + ${opt}"></label>
 
