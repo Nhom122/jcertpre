@@ -13,7 +13,9 @@ public class Feedback {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "learner_id", nullable = true)
     private User learner;
+
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String message;

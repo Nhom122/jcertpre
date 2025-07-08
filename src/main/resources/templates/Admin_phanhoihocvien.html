@@ -90,7 +90,7 @@
   </thead>
   <tbody>
   <tr th:each="fb, i : ${feedbacks}">
-    <td th:text="${fb.learner.fullName}"></td>
+    <td th:text="${fb.learner != null ? fb.learner.fullName : 'Người dùng đã bị xóa'}"></td>
     <td th:text="${fb.message}"></td>
     <td th:text="${#temporals.format(fb.submittedAt, 'dd/MM/yyyy')}"></td>
   </tr>
