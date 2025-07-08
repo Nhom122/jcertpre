@@ -307,9 +307,14 @@
   <a th:href="@{/profile}" class="logo-link">
     <img th:src="@{/images/logo.png}" alt="Logo" />
   </a>
+
   <div class="header-title">
     <i class="fas fa-graduation-cap"></i>
     Chào <span th:text="${user.fullName}">Học viên</span>!
+  </div>
+
+  <div class="hotline"  style="color: white; font-size: 0.95rem; margin-top: 0.25rem;">
+    <i class="fas fa-phone"></i> <strong>Hotline: 1900 1234</strong>
   </div>
 </header>
 
