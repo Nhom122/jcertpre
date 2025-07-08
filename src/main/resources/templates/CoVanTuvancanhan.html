@@ -4,9 +4,39 @@
   <meta charset="UTF-8">
   <title>Yêu Cầu Tư Vấn Từ Học Viên</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .btn-back {
+      margin-bottom: 15px;
+      border-radius: 25px;
+      font-weight: 600;
+      padding: 6px 18px;
+      background-color: transparent;
+      color: #6b7280;
+      border: 2px solid #6b7280;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .btn-back:hover {
+      background-color: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+      text-decoration: none;
+    }
+    .btn-back i {
+      margin-right: 6px;
+    }
+  </style>
 </head>
 <body>
 <div class="container mt-4">
+  <!-- Nút quay lại -->
+  <a th:href="@{/advisor/dashboard}" class="btn btn-back">
+    <i class="fas fa-arrow-left"></i> Quay lại Trang Cố Vấn
+  </a>
+
   <h2 class="mb-4">📬 Yêu Cầu Tư Vấn Từ Học Viên</h2>
   <p>Danh sách các yêu cầu tư vấn từ học viên gửi đến bạn.</p>
 
@@ -32,12 +62,12 @@
       <td th:text="${schedule.topic}">Xin tư vấn về kế hoạch học từ vựng hiệu quả...</td>
       <td th:text="${#temporals.format(schedule.startTime, 'dd/MM/yyyy')}">01/07/2025</td>
       <td>
-  <span th:switch="${schedule.status}">
-    <span th:case="'PENDING'" class="badge badge-warning">Chưa duyệt</span>
-    <span th:case="'APPROVED'" class="badge badge-success">Đã duyệt</span>
-    <span th:case="'REJECTED'" class="badge badge-danger">Đã từ chối</span>
-    <span th:case="*">⚠️ Không xác định</span>
-  </span>
+        <span th:switch="${schedule.status}">
+          <span th:case="'PENDING'" class="badge badge-warning">Chưa duyệt</span>
+          <span th:case="'APPROVED'" class="badge badge-success">Đã duyệt</span>
+          <span th:case="'REJECTED'" class="badge badge-danger">Đã từ chối</span>
+          <span th:case="*">⚠️ Không xác định</span>
+        </span>
       </td>
     </tr>
 

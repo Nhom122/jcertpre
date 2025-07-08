@@ -1,64 +1,86 @@
 package com.jcertpre.services;
 
+import com.jcertpre.model.Course;
 import com.jcertpre.model.User;
 import com.jcertpre.model.User.Role;
-import com.jcertpre.repositories.IUserRepository;
+import com.jcertpre.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
+
     @Autowired
     private IUserRepository userRepository;
 
-    // Đăng ký tài khoản Learner mới
+    @Autowired
+    private IEnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private IConsultationScheduleRepository consultationScheduleRepository;
+
+    @Autowired
+    private IAdvisorStudyPlanRepository advisorStudyPlanRepository;
+
+    @Autowired
+    private ICourseRepository courseRepository;
+
+    @Autowired
+    private IFeedbackRepository feedbackRepository;
+
+    @Autowired
+    private ILessonRepository lessonRepository;
+
+    // ===================== 1. Đăng ký người dùng =====================
+
     public User registerLearner(String email, String password, String fullName) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already in use.");
+            throw new RuntimeException("Email đã tồn tại.");
         }
         User newUser = new User(email, password, fullName, Role.LEARNER);
         return userRepository.save(newUser);
     }
 
-    // Đăng ký tài khoản Learner mới
     public User registerUser(String email, String password, String fullName, Role role) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already in use.");
+            throw new RuntimeException("Email đã tồn tại.");
         }
         User newUser = new User(email, password, fullName, role);
         return userRepository.save(newUser);
     }
 
-    // Đăng nhập (basic check)
+    // ===================== 2. Đăng nhập =====================
+
     public User loginUser(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
             return userOpt.get();
         } else {
-            throw new RuntimeException("Invalid email or password.");
+            throw new RuntimeException("Email hoặc mật khẩu không đúng.");
         }
     }
 
-    // Lấy danh sách tất cả người dùng
+    // ===================== 3. Truy vấn người dùng =====================
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Lấy danh sách người dùng theo vai trò
     public List<User> getUsersByRole(Role role) {
         return userRepository.findByRole(role);
     }
 
-    // Lấy người dùng theo ID
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng với ID: " + id));
     }
 
-    // Cập nhật thông tin người dùng
+    // ===================== 4. Cập nhật thông tin người dùng =====================
+
     public User updateUser(Long id, User updatedUser) {
         User existingUser = getUserById(id);
         existingUser.setFullName(updatedUser.getFullName());
@@ -68,27 +90,40 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    // Xóa người dùng theo ID
+    // ===================== 5. Xóa người dùng (hủy liên kết đúng cách) =====================
+
+    @Transactional
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("Người dùng không tồn tại với ID: " + id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng."));
+
+        if (user.getRole() == Role.INSTRUCTOR) {
+            // Xử lý cho giảng viên: xóa bài giảng, khóa học, gỡ học viên
+            List<Course> courses = courseRepository.findByInstructor(user);
+            for (Course course : courses) {
+                lessonRepository.deleteByCourseId(course.getId());
+                enrollmentRepository.deleteByCourseId(course.getId());
+            }
+            courseRepository.deleteAll(courses);
+
+        } else if (user.getRole() == Role.LEARNER) {
+            // Xử lý cho học viên: hủy liên kết nhưng giữ lại dữ liệu
+            advisorStudyPlanRepository.deleteByUserId(id);
+            consultationScheduleRepository.deleteByUserId(id);
+            enrollmentRepository.detachLearnerByUserId(id);
+            feedbackRepository.detachLearnerByUserId(id); // ⚠️ Gỡ liên kết chứ không xóa feedback
         }
+
         userRepository.deleteById(id);
     }
 
-    // Tạo người dùng từ phía Admin
+    // ===================== 6. Tạo user từ admin =====================
+
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email đã tồn tại.");
         }
-
-        // ⚠️ Nếu bạn muốn bảo mật hơn, hãy mã hóa mật khẩu ở đây:
-        // user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        // Có thể thêm mã hóa mật khẩu tại đây nếu cần
         return userRepository.save(user);
     }
-
-
-
-
 }

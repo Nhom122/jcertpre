@@ -2,36 +2,160 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <title>👨‍🏫 Trang Chủ Giảng Viên</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style th:inline="text">
+        body {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+            url([[ @{/images/4.png} ]]) center/cover no-repeat fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .instructor-header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .instructor-header h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            margin: 0;
+        }
+
+        .instructor-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        .function-item {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #333;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .function-item:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            color: #667eea;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .function-item i {
+            margin-right: 10px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+            color: white;
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            max-width: 1000px;
+        }
+
+        @media (max-width: 768px) {
+            .instructor-header h1 {
+                font-size: 2rem;
+            }
+
+            .function-item {
+                font-size: 1rem;
+                padding: 15px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
 </head>
 <body>
 <div class="container mt-4">
-    <h1>👨‍🏫 Chào mừng, Giảng viên!</h1>
-    <p>Hãy chọn một chức năng bên dưới để bắt đầu công việc</p>
+    <div class="instructor-header">
+        <div class="header-actions">
+            <div>
+                <h1><i class="fas fa-chalkboard-teacher"></i> Trang Chủ Giảng Viên</h1>
+                <p>Chào mừng bạn, Giảng viên! Hãy chọn một chức năng để bắt đầu công việc.</p>
+            </div>
+            <a th:href="@{/logout}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </a>
+        </div>
+    </div>
 
-    <div class="row mt-4">
-
-        <!-- Quản lý khóa học -->
+    <div class="row">
         <div class="col-md-6 mb-3">
-            <a th:href="@{/instructor/courses}" class="btn btn-success btn-block btn-lg">Quản lý khóa học</a>
+            <a th:href="@{/instructor/courses}" class="function-item d-block">
+                <i class="fas fa-book"></i> Quản lý khóa học
+            </a>
         </div>
 
-        <!-- bài giảng -->
         <div class="col-md-6 mb-3">
-            <a href="/jcertpre/instructor/lessons/all" class="btn btn-primary btn-block btn-lg">Tất Cả Bài Giảng</a>
+            <a href="/jcertpre/instructor/lessons/all" class="function-item d-block">
+                <i class="fas fa-chalkboard"></i> Tất Cả Bài Giảng
+            </a>
         </div>
 
-        <!-- lịch livestream -->
         <div class="col-md-6 mb-3">
-            <a href="/jcertpre/instructor/quizitem/list" class="btn btn-primary btn-block btn-lg">Quản lý câu hỏi</a>
+            <a href="/jcertpre/instructor/quizitem/list" class="function-item d-block">
+                <i class="fas fa-question-circle"></i> Quản lý câu hỏi
+            </a>
         </div>
 
-        <!-- Xem Câu hỏi của hoc viên -->
         <div class="col-md-6 mb-3">
-            <a th:href="@{/instructor/exam/list}" class="btn btn-secondary btn-block btn-lg">Quản lý quiz</a>
+            <a th:href="@{/instructor/exam/list}" class="function-item d-block">
+                <i class="fas fa-file-alt"></i> Quản lý quiz
+            </a>
         </div>
     </div>
 </div>
+
+<!-- Optional JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

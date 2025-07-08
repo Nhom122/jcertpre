@@ -51,17 +51,38 @@
         .resource a:hover {
             text-decoration: underline;
         }
-        .back-link {
-            display: inline-block;
+
+        /* Nút quay lại kiểu đẹp */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            color: white;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
             text-decoration: none;
-            color: #555;
-            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            user-select: none;
         }
-        .back-link:hover {
-            text-decoration: underline;
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            text-decoration: none;
+            color: white;
+        }
+        .btn-back i {
+            font-style: normal;
+            font-weight: 700;
         }
     </style>
+    <!-- FontAwesome để icon mũi tên -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
@@ -85,7 +106,9 @@
 
     </div>
 
-    <a class="back-link" href="/jcertpre/learner/dashboard">Quay lại danh sách khóa học</a>
+    <a href="/jcertpre/learner/dashboard" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Quay lại danh sách khóa học
+    </a>
 </div>
 </body>
 </html>

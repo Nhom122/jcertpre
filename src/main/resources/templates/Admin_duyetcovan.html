@@ -3,14 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <title>🧑‍🏫 Quản Lý Lịch Tư Vấn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background:
+              linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+              url('/static/2.png') center/cover no-repeat fixed;
+      color: #333;
+      min-height: 100vh;
+      padding: 40px 60px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #4f46e5;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    a.btn-outline-light {
+      color: #4f46e5;
+      border-color: #4f46e5;
+      font-weight: 600;
+      border-radius: 25px;
+      padding: 8px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+      background: transparent;
+      text-decoration: none;
+    }
+    a.btn-outline-light:hover {
+      background-color: #4f46e5;
+      color: white !important;
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+      text-decoration: none;
+    }
+
+    .table {
+      border-radius: 15px;
+      overflow: hidden;
+      background-color: white;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+    }
+
+    thead.thead-dark th {
+      background-color: #4f46e5;
+      color: white;
+    }
+
+    .btn-success {
+      background: linear-gradient(45deg, #28a745, #218838);
+      border: none;
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, #dc3545, #c82333);
+      border: none;
+    }
+
+    .alert {
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      html, body {
+        padding: 20px 15px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      a.btn-outline-light {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container mt-4">
-  <h1>🧑‍🏫 Quản Lý Lịch Tư Vấn</h1>
 
-  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+<h1>🧑‍🏫 Quản Lý Lịch Tư Vấn</h1>
 
+<a th:href="@{/admin/dashboard}" class="btn btn-outline-light">
+  <i class="fas fa-arrow-left"></i> Quay lại trang chủ quản trị
+</a>
+
+<div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+
+<div class="table-responsive">
   <table class="table table-bordered table-striped">
     <thead class="thead-dark">
     <tr>
@@ -36,12 +131,10 @@
 
       <td>
         <div th:if="${cs.status == 'PENDING'}">
-          <!-- Duyệt -->
           <form th:action="@{/consultations/approve/{id}(id=${cs.id})}" method="post" style="display:inline-block;">
-            <button type="submit" class="btn btn-success btn-sm">✅ Duyệt</button>
+            <button type="submit" class="btn btn-success btn-sm mb-1">✅ Duyệt</button>
           </form>
 
-          <!-- Từ chối -->
           <form th:action="@{/consultations/reject/{id}(id=${cs.id})}" method="post" style="display:inline-block;">
             <input type="hidden" name="status" value="REJECTED" />
             <button type="submit" class="btn btn-danger btn-sm">❌ Từ chối</button>
@@ -56,7 +149,7 @@
   </table>
 </div>
 
-<!-- Bootstrap JS -->
+<!-- JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

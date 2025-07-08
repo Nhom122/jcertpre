@@ -61,7 +61,17 @@ public class DashboardController {
 
 
     @GetMapping("/admin/dashboard")
-    public String adminHome(Model model) {
+    public String adminHome(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "login";
+        }
+
+        if (ADMIN != user.getRole()) {
+            return "login";
+        }
+
         long totalUsers = userService.getAllUsers().size();
         long pendingCourses = courseService.countPendingCourses(); // cần triển khai
         long pendingFeedbacks = feedbackService.countPendingFeedbacks(); // cần triển khai

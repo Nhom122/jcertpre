@@ -62,6 +62,13 @@
     <p><strong>Mô tả:</strong> <span th:text="${course.description}">Mô tả</span></p>
     <a th:href="@{/courses/{id}(id=${course.id})}" class="btn">Vào học</a>
   </div>
+
+  <!-- Nút Quay lại Trang Chủ -->
+  <div style="text-align: center; margin-top: 2rem;">
+    <a th:href="@{/learner/dashboard}" class="btn" style="background-color: #6c757d;">
+      ← Quay lại Trang Chủ
+    </a>
+  </div>
 </div>
 </body>
 </html>

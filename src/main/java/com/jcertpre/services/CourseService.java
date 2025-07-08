@@ -3,8 +3,11 @@ package com.jcertpre.services;
 import com.jcertpre.model.Course;
 import com.jcertpre.model.User;
 import com.jcertpre.repositories.ICourseRepository;
+import com.jcertpre.repositories.IEnrollmentRepository;
+import com.jcertpre.repositories.ILessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,10 +15,14 @@ import java.util.List;
 public class CourseService {
 
     private final ICourseRepository courseRepository;
+    private final IEnrollmentRepository enrollmentRepository;
+    private final ILessonRepository lessonRepository;
 
     @Autowired
-    public CourseService(ICourseRepository courseRepository) {
+    public CourseService(ICourseRepository courseRepository, IEnrollmentRepository enrollmentRepository, ILessonRepository lessonRepository) {
         this.courseRepository = courseRepository;
+        this.enrollmentRepository = enrollmentRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     public List<Course> getAllCourses() {
@@ -63,7 +70,11 @@ public class CourseService {
         return courseRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public void deleteById(Long id) {
-        courseRepository.deleteById(id);
+        lessonRepository.deleteByCourseId(id);       // Xóa bài học trước
+        enrollmentRepository.deleteByCourseId(id);   // Rồi mới xóa học viên
+        courseRepository.deleteById(id);             // Cuối cùng xóa khóa học
     }
+
 }

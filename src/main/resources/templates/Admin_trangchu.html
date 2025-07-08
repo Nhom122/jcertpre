@@ -5,50 +5,267 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trang Quản Trị</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style th:inline="text">
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url([[ @{/images/2.png} ]]) center/cover no-repeat fixed;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .admin-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-header h1 {
+            color: white;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .admin-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 10px 0 0 0;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+            text-decoration: none;
+            color: white;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-card .card-header {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .stats-card .card-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-card .icon {
+            font-size: 2.5rem;
+            opacity: 0.1;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .primary-card .icon { color: #007bff; }
+        .warning-card .icon { color: #ffc107; }
+        .danger-card .icon { color: #dc3545; }
+
+        .functions-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .functions-title {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .function-item {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .function-item:hover {
+            transform: translateX(10px);
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        .function-item i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .function-item span {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stats-card .card-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-4">
-    <h2 class="mb-3">🛠️ Trang Quản Trị Hệ Thống</h2>
-    <p>Chào mừng bạn, Admin! Dưới đây là tổng quan hệ thống và các chức năng quản lý.</p>
+    <div class="admin-header">
+        <div class="header-actions">
+            <div>
+                <h1><i class="fas fa-cogs"></i> Trang Quản Trị Hệ Thống</h1>
+                <p>Chào mừng bạn, Admin! Dưới đây là tổng quan hệ thống và các chức năng quản lý.</p>
+            </div>
+            <a th:href="@{/logout}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </a>
+        </div>
+    </div>
 
-    <div class="row mt-4">
+    <div class="row">
         <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">👥 Tổng số người dùng</div>
+            <div class="stats-card primary-card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i> Tổng số người dùng
+                </div>
                 <div class="card-body">
                     <h5 class="card-title" th:text="${totalUsers}">0</h5>
                 </div>
+                <i class="fas fa-users icon"></i>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">📚 Khóa học chờ duyệt</div>
+            <div class="stats-card warning-card">
+                <div class="card-header">
+                    <i class="fas fa-book"></i> Khóa học chờ duyệt
+                </div>
                 <div class="card-body">
                     <h5 class="card-title" th:text="${pendingCourses}">0</h5>
                 </div>
+                <i class="fas fa-book icon"></i>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-header">📩 Phản ánh từ học viên</div>
+            <div class="stats-card danger-card">
+                <div class="card-header">
+                    <i class="fas fa-envelope"></i> Phản ánh từ học viên
+                </div>
                 <div class="card-body">
                     <h5 class="card-title" th:text="${pendingFeedbacks}">0</h5>
                 </div>
+                <i class="fas fa-envelope icon"></i>
             </div>
         </div>
     </div>
 
-    <hr>
-
-    <h4 class="mt-4">🔧 Các chức năng quản trị</h4>
-    <div class="list-group">
-        <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">👤 Quản lý người dùng</a>
-        <a th:href="@{/admin/courses/pending}" class="list-group-item list-group-item-action">📘 Duyệt khóa học</a>
-        <a th:href="@{/admin/consultations}" class="list-group-item list-group-item-action">🗓️ Duyệt lịch tư vấn</a>
-        <a th:href="@{/admin/feedback/pending}" class="list-group-item list-group-item-action">📬 Phản ánh từ học viên</a>
-
+    <div class="functions-section">
+        <h4 class="functions-title">
+            <i class="fas fa-tools"></i> Các chức năng quản trị
+        </h4>
+        <div class="list-group">
+            <a th:href="@{/admin/users}" class="function-item">
+                <i class="fas fa-user-cog"></i>
+                <span>Quản lý người dùng</span>
+            </a>
+            <a th:href="@{/admin/courses/pending}" class="function-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Duyệt khóa học</span>
+            </a>
+            <a th:href="@{/admin/consultations}" class="function-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Duyệt lịch tư vấn</span>
+            </a>
+            <a th:href="@{/admin/feedback/pending}" class="function-item">
+                <i class="fas fa-comments"></i>
+                <span>Phản ánh từ học viên</span>
+            </a>
+        </div>
     </div>
 </div>
 

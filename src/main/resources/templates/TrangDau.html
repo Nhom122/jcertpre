@@ -3,22 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nền Tảng Học Tập</title>
-  <style>
+  <title>Nền Tảng Học Tập - JCertPre</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style th:inline="text">
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
       color: #333;
+      min-height: 100vh;
+      background:
+      linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+      url([[ @{/static/5.png} ]]) no-repeat center center fixed;
+      background-size: cover;
     }
 
     header {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.9);
       padding: 20px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(6px);
     }
 
     header h2 {
@@ -31,6 +44,11 @@
       text-decoration: none;
       color: #444;
       font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #4f46e5;
     }
 
     nav a.button {
@@ -42,7 +60,7 @@
 
     .hero {
       text-align: center;
-      padding: 80px 20px 50px;
+      padding: 100px 20px 60px;
       background: linear-gradient(to right, #eef2ff, #f5f8ff);
     }
 
@@ -78,7 +96,7 @@
       justify-content: center;
       gap: 30px;
       flex-wrap: wrap;
-      padding: 40px 20px;
+      padding: 60px 20px 30px;
     }
 
     .feature-box {
@@ -93,6 +111,25 @@
     .feature-box h3 {
       color: #4f46e5;
       margin-bottom: 10px;
+    }
+
+    .intro {
+      background-color: #ffffff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .intro h2 {
+      color: #4f46e5;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .intro p {
+      font-size: 17px;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .cta {
@@ -110,6 +147,11 @@
       border-radius: 25px;
       font-weight: bold;
       cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cta button:hover {
+      background-color: #f0f0ff;
     }
 
     footer {
@@ -119,16 +161,27 @@
       font-size: 14px;
       color: #555;
     }
+
+    @media (max-width: 768px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .feature-box {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h2>Nền Tảng Học Tập</h2>
+  <h2>JCertPre</h2>
   <nav>
-    <a href="#">Trang chủ</a>
-    <a href="#">Giới thiệu</a>
-    <a href="#">Tính năng</a>
+    <a href="javascript:location.reload()">Trang chủ</a>
+    <a href="#intro">Giới thiệu</a>
+    <a href="#features">Tính năng</a>
     <a href="login">Đăng nhập</a>
     <a href="register" class="button">Đăng ký</a>
   </nav>
@@ -140,28 +193,37 @@
   <button onclick="window.location.href='register'">Khám phá ngay</button>
 </section>
 
-<section class="features">
+<section id="intro" class="intro">
+  <h2>Giới thiệu về JCertPre</h2>
+  <p>
+    <strong>JCertPre</strong> là nền tảng học tiếng Nhật hiện đại, hỗ trợ người học tiếp cận kiến thức hiệu quả qua các bài giảng trực tuyến,
+    bài kiểm tra tự động, tư vấn cá nhân và các chứng chỉ phù hợp với trình độ. Với đội ngũ giảng viên giàu kinh nghiệm và công nghệ hỗ trợ học tập thông minh,
+    JCertPre hướng đến việc tạo ra một hành trình học tập cá nhân hóa, thú vị và dễ tiếp cận cho mọi đối tượng.
+  </p>
+</section>
+
+<section id="features" class="features">
   <div class="feature-box">
-    <h3>Bài giảng trực tuyến & livestream</h3>
-    <p>Theo dõi hàng trăm bài học qua video và lớp học trực tiếp tương tác.</p>
+    <h3>🎓 Bài giảng từ giảng viên</h3>
+    <p>Truy cập vào hệ thống bài giảng đa dạng, có lộ trình rõ ràng từ các giảng viên chuyên môn cao.</p>
   </div>
   <div class="feature-box">
-    <h3>Kiểm tra & đánh giá thông minh</h3>
-    <p>Làm bài thi thử, phân tích kết quả và cải thiện theo lộ trình đề xuất.</p>
+    <h3>💡 Khuyến nghị học tập từ cố vấn</h3>
+    <p>Nhận tư vấn cá nhân hóa theo năng lực, giúp bạn tập trung vào những gì cần cải thiện.</p>
   </div>
   <div class="feature-box">
-    <h3>Hỗ trợ học tập cá nhân hóa</h3>
-    <p>Được tư vấn riêng về kế hoạch học tập và cách đạt chứng chỉ mong muốn.</p>
+    <h3>📝 Thi mô phỏng & đánh giá</h3>
+    <p>Làm bài thi thử chuẩn JLPT, đánh giá năng lực và nhận phân tích kết quả chi tiết.</p>
   </div>
 </section>
 
 <section class="cta">
   <h2>Bạn đã sẵn sàng bắt đầu hành trình mới?</h2>
-  <button>Tham gia miễn phí</button>
+  <button onclick="window.location.href='register'">Tham gia miễn phí</button>
 </section>
 
 <footer>
-  © 2025 Nền tảng học tập. Bản quyền đã được bảo hộ.
+  © 2025 JCertPre. Nền tảng học tiếng Nhật hiệu quả cho mọi người học.
 </footer>
 
 </body>

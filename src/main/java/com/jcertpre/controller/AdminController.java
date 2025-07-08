@@ -4,12 +4,15 @@ import com.jcertpre.model.User;
 import com.jcertpre.services.CourseService;
 import com.jcertpre.services.FeedbackService;
 import com.jcertpre.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.jcertpre.model.User.Role.ADMIN;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,7 +29,17 @@ public class AdminController {
 
     // ✅ Trang quản lý người dùng
     @GetMapping("/users")
-    public String showUserManagementPage(Model model) {
+    public String showUserManagementPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "login";
+        }
+
+        if (ADMIN != user.getRole()) {
+            return "login";
+        }
+
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "Admin_quanli"; // Trang quản lý người dùng
