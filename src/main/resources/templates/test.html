@@ -1,59 +1,416 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang Quản Trị</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Bảng điều khiển Học viên - JCertPre</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url('/static/3.png') center/cover no-repeat fixed;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-link img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            gap: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card p {
+            margin-bottom: 1rem;
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .card p strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.6);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .study-plan-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-left: 5px solid #667eea;
+        }
+
+        .exam-card {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            border-left: 5px solid #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-title {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2 class="mb-3">🛠️ Trang Quản Trị Hệ Thống</h2>
-    <p>Chào mừng bạn, Admin! Dưới đây là tổng quan hệ thống và các chức năng quản lý.</p>
-
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-header">👥 Tổng số người dùng</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${totalUsers}">0</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-                <div class="card-header">📚 Khóa học chờ duyệt</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${pendingCourses}">0</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-header">📩 Phản hồi chưa xử lý</div>
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${pendingFeedbacks}">0</h5>
-                </div>
-            </div>
-        </div>
+<header>
+    <a th:href="@{/profile}" class="logo-link">
+        <img th:src="@{/static/logo.png}" alt="Logo" />
+    </a>
+    <div class="header-title">
+        <i class="fas fa-graduation-cap"></i>
+        Chào <span th:text="${user.fullName}">Học viên</span>!
     </div>
+</header>
 
-    <hr>
+<nav>
+    <a href="#recommend"><i class="fas fa-lightbulb"></i> Khuyến nghị</a>
+    <a href="#courses"><i class="fas fa-book"></i> Khoá học</a>
+    <a href="#exams"><i class="fas fa-pen-to-square"></i> Mô phỏng thi</a>
+    <a href="#feedback"><i class="fas fa-comments"></i> Góp ý</a>
+    <a th:href="@{/logout}" class="btn-danger" style="background: linear-gradient(45deg, #ff6b6b, #ee5a52);"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+</nav>
 
-    <h4 class="mt-4">🔧 Các chức năng quản trị</h4>
-    <div class="list-group">
-        <a href="/admin/users" class="list-group-item list-group-item-action">👤 Quản lý người dùng</a>
-        <a href="/admin/courses/pending" class="list-group-item list-group-item-action">📘 Duyệt khóa học</a>
-        <a href="/admin/consultations/pending" class="list-group-item list-group-item-action">🗓️ Duyệt lịch tư vấn</a>
-        <a href="/admin/feedback" class="list-group-item list-group-item-action">📬 Xử lý phản hồi học viên</a>
-        <a href="/admin/reports" class="list-group-item list-group-item-action">📈 Báo cáo tổng hợp</a>
-    </div>
+<div class="container">
+    <section id="recommend">
+        <h2 class="section-title">
+            <i class="fas fa-lightbulb"></i>
+            Khuyến nghị học tập
+        </h2>
+        <div th:if="${#lists.isEmpty(studyPlans)}" class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <p>Chưa có khuyến nghị học tập nào từ cố vấn</p>
+        </div>
+        <div class="card study-plan-card" th:each="plan : ${studyPlans}">
+            <p><strong><i class="fas fa-target"></i> Mục tiêu:</strong> <span th:text="${plan.goal}">Đạt N3 trong 2 tháng</span></p>
+            <p><strong><i class="fas fa-chess"></i> Chiến lược:</strong> <span th:text="${plan.strategy}">Học 5 bài mỗi tuần, luyện đề cuối tuần</span></p>
+            <p><strong><i class="fas fa-comment-dots"></i> Nhận xét:</strong> <span th:text="${plan.progressNote}">Tiến độ tốt, cần cải thiện từ vựng</span></p>
+            <p><strong><i class="fas fa-user-tie"></i> Cố vấn:</strong> <span th:text="${plan.advisor.fullName}">Nguyễn Văn A</span></p>
+        </div>
+    </section>
+
+    <section id="courses">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-book"></i>
+                Khoá học của tôi
+            </h2>
+            <a class="btn btn-secondary" th:href="@{/courses/learner/register}">
+                <i class="fas fa-plus"></i> Đăng ký khóa học mới
+            </a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(enrolledCourses)}" class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <p>Bạn chưa đăng ký khóa học nào</p>
+            <a class="btn btn-secondary" th:href="@{/courses/learner/register}">
+                <i class="fas fa-plus"></i> Đăng ký ngay
+            </a>
+        </div>
+
+        <div class="course-grid">
+            <div th:each="course : ${enrolledCourses}" class="course-card">
+                <p><strong><i class="fas fa-graduation-cap"></i> Khóa học:</strong> <span th:text="${course.title}">Tên</span></p>
+                <p><strong><i class="fas fa-info-circle"></i> Mô tả:</strong> <span th:text="${course.description}">Mô tả</span></p>
+                <a th:href="@{/courses/{id}(id=${course.id})}" class="btn">
+                    <i class="fas fa-play"></i> Vào học
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="exams">
+        <h2 class="section-title">
+            <i class="fas fa-pen-to-square"></i>
+            Luyện đề thi
+        </h2>
+        <div th:if="${#lists.isEmpty(examSimulations)}" class="empty-state">
+            <i class="fas fa-file-text"></i>
+            <p>Chưa có đề thi nào</p>
+        </div>
+        <div class="card exam-card" th:each="exam : ${examSimulations}">
+            <p><strong><i class="fas fa-clipboard-question"></i> Đề thi:</strong> <span th:text="${exam.title}">Tên đề thi</span></p>
+            <a class="btn" th:href="@{/instructor/exam/take/{id}(id=${exam.id})}">
+                <i class="fas fa-play"></i> Bắt đầu thi
+            </a>
+        </div>
+    </section>
+
+    <section id="feedback">
+        <h2 class="section-title">
+            <i class="fas fa-comments"></i>
+            Góp ý cho hệ thống
+        </h2>
+        <div class="card">
+            <form th:action="@{/feedback/submit}" method="post">
+                <div class="form-group">
+                    <label for="feedbackContent">
+                        <i class="fas fa-pen"></i> Ý kiến / Đề xuất:
+                    </label>
+                    <textarea
+                            id="feedbackContent"
+                            name="content"
+                            rows="4"
+                            class="form-control"
+                            placeholder="Nhập góp ý của bạn tại đây..."
+                            required></textarea>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i> Gửi góp ý
+                </button>
+            </form>
+        </div>
+    </section>
 </div>
 
-<!-- Optional JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

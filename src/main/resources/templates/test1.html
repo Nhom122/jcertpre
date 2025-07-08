@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bảng điều khiển Học viên - JCertPre</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
   <style th:inline="text">
     * {
       margin: 0;
@@ -19,7 +20,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-
+    /* Các phần CSS còn lại giữ nguyên */
     header {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -305,129 +306,36 @@
 <body>
 <header>
   <a th:href="@{/profile}" class="logo-link">
-    <img th:src="@{/images/logo.png}" alt="Logo" />
+    <img th:src="@{/static/logo.png}" alt="Logo" />
   </a>
-
   <div class="header-title">
     <i class="fas fa-graduation-cap"></i>
     Chào <span th:text="${user.fullName}">Học viên</span>!
   </div>
-
-  <div class="hotline"  style="color: white; font-size: 0.95rem; margin-top: 0.25rem;">
-    <i class="fas fa-phone"></i> <strong>Hotline: 1900 1234</strong>
-  </div>
 </header>
 
 <nav>
-  <a href="#recommend"><i class="fas fa-lightbulb"></i> Khuyến nghị</a>
-  <a href="#courses"><i class="fas fa-book"></i> Khoá học</a>
-  <a href="#exams"><i class="fas fa-pen-to-square"></i> Mô phỏng thi</a>
-  <a href="#feedback"><i class="fas fa-comments"></i> Góp ý</a>
-  <a th:href="@{/logout}" class="btn-danger" style="background: linear-gradient(45deg, #ff6b6b, #ee5a52);"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+  <a th:href="@{/student/dashboard}" class="nav-link">
+    <i class="fas fa-tachometer-alt"></i> Dashboard
+  </a>
+  <a th:href="@{/student/courses}" class="nav-link">
+    <i class="fas fa-book"></i> Khóa học
+  </a>
+  <a th:href="@{/student/studyplan}" class="nav-link">
+    <i class="fas fa-list-check"></i> Kế hoạch học
+  </a>
+  <a th:href="@{/student/exam}" class="nav-link">
+    <i class="fas fa-file-alt"></i> Bài thi
+  </a>
+  <a th:href="@{/logout}" class="nav-link text-danger">
+    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+  </a>
 </nav>
 
 <div class="container">
-  <section id="recommend">
-    <h2 class="section-title">
-      <i class="fas fa-lightbulb"></i>
-      Khuyến nghị học tập
-    </h2>
-    <div th:if="${#lists.isEmpty(studyPlans)}" class="empty-state">
-      <i class="fas fa-clipboard-list"></i>
-      <p>Chưa có khuyến nghị học tập nào từ cố vấn</p>
-    </div>
-    <div class="card study-plan-card" th:each="plan : ${studyPlans}">
-      <p><strong><i class="fas fa-target"></i> Mục tiêu:</strong> <span th:text="${plan.goal}">Đạt N3 trong 2 tháng</span></p>
-      <p><strong><i class="fas fa-chess"></i> Chiến lược:</strong> <span th:text="${plan.strategy}">Học 5 bài mỗi tuần, luyện đề cuối tuần</span></p>
-      <p><strong><i class="fas fa-comment-dots"></i> Nhận xét:</strong> <span th:text="${plan.progressNote}">Tiến độ tốt, cần cải thiện từ vựng</span></p>
-      <p><strong><i class="fas fa-user-tie"></i> Cố vấn:</strong> <span th:text="${plan.advisor.fullName}">Nguyễn Văn A</span></p>
-    </div>
-  </section>
-
-  <section id="courses">
-    <div class="section-header">
-      <h2 class="section-title">
-        <i class="fas fa-book"></i>
-        Khoá học của tôi
-      </h2>
-      <a class="btn btn-secondary" th:href="@{/courses/learner/register}">
-        <i class="fas fa-plus"></i> Đăng ký khóa học mới
-      </a>
-    </div>
-
-    <div th:if="${#lists.isEmpty(enrolledCourses)}" class="empty-state">
-      <i class="fas fa-book-open"></i>
-      <p>Bạn chưa đăng ký khóa học nào</p>
-      <a class="btn btn-secondary" th:href="@{/courses/learner/register}">
-        <i class="fas fa-plus"></i> Đăng ký ngay
-      </a>
-    </div>
-
-    <div class="course-grid">
-      <div th:each="course : ${enrolledCourses}" class="course-card">
-        <p><strong><i class="fas fa-graduation-cap"></i> Khóa học:</strong> <span th:text="${course.title}">Tên</span></p>
-        <p><strong><i class="fas fa-info-circle"></i> Mô tả:</strong> <span th:text="${course.description}">Mô tả</span></p>
-        <a th:href="@{/courses/{id}(id=${course.id})}" class="btn">
-          <i class="fas fa-play"></i> Vào học
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section id="exams">
-    <h2 class="section-title">
-      <i class="fas fa-pen-to-square"></i>
-      Luyện đề thi
-    </h2>
-    <div th:if="${#lists.isEmpty(examSimulations)}" class="empty-state">
-      <i class="fas fa-file-text"></i>
-      <p>Chưa có đề thi nào</p>
-    </div>
-    <div class="card exam-card" th:each="exam : ${examSimulations}">
-      <p><strong><i class="fas fa-clipboard-question"></i> Đề thi:</strong> <span th:text="${exam.title}">Tên đề thi</span></p>
-      <a class="btn" th:href="@{/instructor/exam/take/{id}(id=${exam.id})}">
-        <i class="fas fa-play"></i> Bắt đầu thi
-      </a>
-    </div>
-  </section>
-
-  <section id="feedback">
-    <h2 class="section-title">
-      <i class="fas fa-comments"></i>
-      Góp ý cho hệ thống
-    </h2>
-    <div class="card">
-      <form th:action="@{/feedback/submit}" method="post">
-        <div class="form-group">
-          <label for="feedbackContent">
-            <i class="fas fa-pen"></i> Ý kiến / Đề xuất:
-          </label>
-          <textarea
-                  id="feedbackContent"
-                  name="content"
-                  rows="4"
-                  class="form-control"
-                  placeholder="Nhập góp ý của bạn tại đây..."
-                  required></textarea>
-        </div>
-        <button type="submit" class="btn">
-          <i class="fas fa-paper-plane"></i> Gửi góp ý
-        </button>
-      </form>
-    </div>
-  </section>
+  <!-- Nội dung trang student dashboard ở đây -->
 </div>
 
-<section id="feedback">
-  <h2 class="section-title">💬 Góp ý cho hệ thống</h2>
-  <div class="card">
-    <form th:action="@{/feedback/submit}" method="post">
-      <label for="feedbackContent"><strong>Ý kiến / Đề xuất:</strong></label><br />
-      <textarea id="feedbackContent" name="content" rows="4" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc;" placeholder="Nhập góp ý của bạn tại đây..."></textarea><br /><br />
-      <button type="submit" class="btn">📩 Gửi góp ý</button>
-    </form>
-  </div>
-</section>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </body>
 </html>
