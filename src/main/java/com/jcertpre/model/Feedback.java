@@ -13,7 +13,7 @@ public class Feedback {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "learner_id", nullable = false)
+    @JoinColumn(name = "learner_id", nullable = true)
     private User learner;
 
 

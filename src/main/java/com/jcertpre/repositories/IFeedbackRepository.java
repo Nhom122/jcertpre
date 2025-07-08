@@ -14,17 +14,19 @@ import java.util.List;
 
 @Repository
 public interface IFeedbackRepository extends JpaRepository<Feedback, Long> {
+
     List<Feedback> findByStatus(Status status);
     List<Feedback> findByLearner_Id(Long learnerId);
-
-    // ✅ Thêm dòng này để đếm theo status
     long countByStatus(Status status);
-
     List<Feedback> findByStatusOrderBySubmittedAtDesc(Feedback.Status status);
 
+    // ❌ KHÔNG dùng nữa: không xóa feedback
+    // void deleteByLearnerId(Long learnerId);
+
+    // ✅ Gỡ liên kết learner khỏi feedback
     @Transactional
     @Modifying
-    @Query("DELETE FROM Feedback f WHERE f.learner.id = :learnerId")
-    void deleteByLearnerId(@Param("learnerId") Long learnerId);
-
+    @Query("UPDATE Feedback f SET f.learner = NULL WHERE f.learner.id = :learnerId")
+    void detachLearnerByUserId(@Param("learnerId") Long learnerId);
 }
+
