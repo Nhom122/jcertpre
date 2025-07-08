@@ -4,9 +4,38 @@
   <meta charset="UTF-8" />
   <title>Quản lý đề thi</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .btn-back {
+      margin-bottom: 15px;
+      border-radius: 25px;
+      font-weight: 600;
+      padding: 6px 18px;
+      background-color: transparent;
+      color: #6b7280;
+      border: 2px solid #6b7280;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .btn-back:hover {
+      background-color: #4f46e5;
+      color: white;
+      border-color: #4f46e5;
+      text-decoration: none;
+    }
+    .btn-back i {
+      margin-right: 6px;
+    }
+  </style>
 </head>
 <body>
 <div class="container mt-4">
+  <!-- Nút quay lại -->
+  <a href="/jcertpre/instructor/dashboard" class="btn btn-back">
+    <i class="fas fa-arrow-left"></i> Quay lại Trang Giảng Viên
+  </a>
+
   <h2>📝 Quản lý đề thi</h2>
   <a href="/jcertpre/instructor/exam/create" class="btn btn-primary mb-3">➕ Tạo đề thi mới</a>
   <table class="table table-striped">
@@ -33,5 +62,8 @@
     </tbody>
   </table>
 </div>
+
+<!-- Thêm FontAwesome cho icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

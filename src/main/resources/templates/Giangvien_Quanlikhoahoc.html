@@ -5,20 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quản lý khóa học</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+        h2 {
+            color: #4f46e5;
+            font-weight: 700;
+        }
+        .btn-back {
+            margin-bottom: 15px;
+            border-radius: 25px;
+            font-weight: 600;
+            padding: 6px 18px;
+            background-color: transparent;
+            color: #6b7280;
+            border: 2px solid #6b7280;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            background-color: #4f46e5; /* màu tím đậm */
+            color: white;
+            border-color: #4f46e5;
+            text-decoration: none;
+        }
+        .btn-back i {
+            margin-right: 6px;
+        }
+        p {
+            color: #555;
+            margin-top: 4px;
+            font-size: 1rem;
+        }
+        .btn-outline-secondary {
+            border-radius: 25px;
+            padding: 6px 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        .btn-success {
+            border-radius: 25px;
+            font-weight: 600;
+            padding: 8px 22px;
+            box-shadow: 0 6px 18px rgba(72, 187, 120, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #3a9453;
+            box-shadow: 0 8px 26px rgba(58, 148, 83, 0.7);
+        }
+        .table {
+            background: white;
+            box-shadow: 0 8px 30px rgb(0 0 0 / 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .thead-dark th {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+        .badge-success {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .badge-warning {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .btn-sm {
+            border-radius: 20px;
+            font-weight: 600;
+            padding: 5px 14px;
+        }
+        .btn-info {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .btn-info:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #6366f1;
+            border-color: #6366f1;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-4">
     <!-- Tiêu đề và nút tạo khóa học -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex align-items-center">
-            <a th:href="@{/advisor/dashboard}" class="btn btn-outline-secondary mr-3">Trang chủ</a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <div class="d-flex align-items-center mb-2 mb-md-0">
+            <a th:href="@{/instructor/dashboard}" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại Trang Giảng Viên
+            </a>
 
             <div>
                 <h2>🎓 Khóa học của tôi</h2>
                 <p>Quản lý, chỉnh sửa và theo dõi các khóa học bạn đã tạo</p>
             </div>
         </div>
-        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#createCourseForm">
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#createCourseForm" aria-expanded="false" aria-controls="createCourseForm">
             ➕ Tạo khóa học mới
         </button>
     </div>
@@ -28,19 +137,20 @@
 
     <!-- Form tạo khóa học -->
     <div class="collapse mb-4" id="createCourseForm">
-        <div class="card card-body">
-            <form th:action="@{/courses/create}" method="post">
+        <div class="card card-body shadow-sm rounded">
+            <form th:action="@{/courses/create}" method="post" novalidate>
                 <div class="form-group">
                     <label for="title">Tiêu đề</label>
-                    <input type="text" name="title" id="title" class="form-control" required />
+                    <input type="text" name="title" id="title" class="form-control" placeholder="Nhập tiêu đề khóa học" required />
                 </div>
                 <div class="form-group">
                     <label for="description">Mô tả</label>
-                    <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+                    <textarea name="description" id="description" class="form-control" rows="3" placeholder="Nhập mô tả khóa học" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="courseType">Loại khóa học</label>
                     <select name="courseType" id="courseType" class="form-control" required>
+                        <option value="" disabled selected>-- Chọn loại khóa học --</option>
                         <option value="VIDEO">Video</option>
                         <option value="LIVESTREAM">Livestream</option>
                         <option value="OFFLINE">Offline</option>
