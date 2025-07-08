@@ -26,4 +26,10 @@ public interface IEnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Transactional
     @Query("UPDATE Enrollment e SET e.learner = NULL WHERE e.learner.id = :userId")
     void detachLearnerByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Enrollment e WHERE e.course.id = :courseId")
+    void deleteByCourseId(@Param("courseId") Long courseId);
+
 }

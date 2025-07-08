@@ -1,9 +1,9 @@
 package com.jcertpre.services;
 
+import com.jcertpre.model.Course;
 import com.jcertpre.model.User;
 import com.jcertpre.model.User.Role;
-import com.jcertpre.repositories.IEnrollmentRepository;
-import com.jcertpre.repositories.IUserRepository;
+import com.jcertpre.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,15 @@ public class UserService {
 
     @Autowired
     private IEnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private IConsultationScheduleRepository consultationScheduleRepository;
+
+    @Autowired
+    private IAdvisorStudyPlanRepository advisorStudyPlanRepository;
+
+    @Autowired
+    private ICourseRepository courseRepository;
 
     // Đăng ký tài khoản Learner mới
     public User registerLearner(String email, String password, String fullName) {
@@ -74,12 +83,13 @@ public class UserService {
 
     // Xóa người dùng theo ID
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("Người dùng không tồn tại với ID: " + id);
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        advisorStudyPlanRepository.deleteByUserId(id);
         enrollmentRepository.detachLearnerByUserId(id);
-
-
+        consultationScheduleRepository.deleteByUserId(id);
+        List<Course> courses = courseRepository.findByInstructor(user);
+        courseRepository.deleteAll(courses);
         userRepository.deleteById(id);
     }
 
